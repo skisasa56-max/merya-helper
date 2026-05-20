@@ -2719,14 +2719,14 @@ DragLicensesOrder:
 return
 
 ; ====================================================================================================
-; СИСТЕМА АВТООБНОВЛЕНИЯ (ФУНКЦИИ)
+; СИСТЕМА АВТООБНОВЛЕНИЯ
 ; ====================================================================================================
 CheckForUpdatesStartup:
     CheckForUpdates(false)
 return
 
 CheckForUpdates(showMsg := false) {
-    global ScriptVersion, UpdateCheckUrl, ScriptDownloadUrl, UpdateTempFile, UpdateBatFile
+    global ScriptVersion, UpdateCheckUrl, ScriptDownloadUrl, UpdateTempFile
     tempVerFile := A_Temp "\mhelper_ver.txt"
     try {
         URLDownloadToFile, %UpdateCheckUrl%, %tempVerFile%
@@ -2739,7 +2739,8 @@ CheckForUpdates(showMsg := false) {
             return
         }
         if (remoteVer != ScriptVersion) {
-            answer := MsgBox, 4132, Доступно обновление, Версия %remoteVer% уже доступна.`nУ вас версия %ScriptVersion%.`nОбновить сейчас?
+            msgText = Версия %remoteVer% уже доступна. У вас версия %ScriptVersion%. Обновить сейчас?
+            answer := MsgBox, 4132, Доступно обновление, %msgText%
             if (answer = "Yes") {
                 URLDownloadToFile, %ScriptDownloadUrl%, %UpdateTempFile%
                 if (ErrorLevel) {
@@ -2758,24 +2759,13 @@ CheckForUpdates(showMsg := false) {
 }
 
 PerformUpdate() {
-    global UpdateTempFile, UpdateBatFile
-    FileDelete, %UpdateBatFile%
-    FileAppend,
-    (
-@echo off
-timeout /t 1 /nobreak > nul
-copy /y "%UpdateTempFile%" "%A_ScriptFullPath%"
-if errorlevel 1 (
-    echo Ошибка копирования. Запустите скрипт от имени администратора.
-    pause
-) else (
-    start "" "%A_ScriptFullPath%"
-)
-del "%UpdateTempFile%"
-del "%~f0"
-    ), %UpdateBatFile%
-    Run, %UpdateBatFile%, , Hide
-    SaveAllSettings()
+    global UpdateTempFile
+    FileCopy, %UpdateTempFile%, %A_ScriptFullPath%, 1
+    if (ErrorLevel) {
+        MsgBox, 4096, Ошибка, Не удалось обновить файл. Возможно, скрипт запущен не от имени администратора.
+        return
+    }
+    Run, "%A_ScriptFullPath%"
     ExitApp
 }
 
