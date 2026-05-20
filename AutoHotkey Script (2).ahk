@@ -1,9 +1,20 @@
-﻿; ====================================================================================================
+; ====================================================================================================
 ; МЭРИЯ HELPER v18.1 - ПОЛНОСТЬЮ РАБОЧАЯ ВЕРСИЯ + АДВОКАТСКИЙ МОДУЛЬ + СИСТЕМНЫЕ КОМБИНАЦИИ
 ; ====================================================================================================
 #SingleInstance Force
 #NoEnv
 SetWorkingDir %A_ScriptDir%
+
+; ====================================================================================================
+; НАСТРОЙКИ АВТООБНОВЛЕНИЯ
+; ====================================================================================================
+global ScriptVersion := "18.2"
+global UpdateCheckUrl := "https://raw.githubusercontent.com/skisasa56-max/merya-helper/refs/heads/main/version.txt"
+global ScriptDownloadUrl := "https://raw.githubusercontent.com/skisasa56-max/merya-helper/refs/heads/main/AutoHotkey%20Script%20(2).ahk"
+global UpdateTempFile := A_ScriptDir "\update_temp.ahk"
+global UpdateBatFile := A_ScriptDir "\update.bat"
+
+SetTimer, CheckForUpdatesStartup, -2000
 OnExit, SaveOnExit
 SetTimer, ForceOpenMainGui, -500
 
@@ -12,9 +23,10 @@ SetTimer, ForceOpenMainGui, -500
 ; ====================================================================================================
 Menu, Tray, NoStandard
 Menu, Tray, Add, Развернуть, RestoreFromTray
+Menu, Tray, Add, Проверить обновления, CheckUpdatesManual
+Menu, Tray, Add, О программе, ShowAbout
+Menu, Tray, Add  ; разделитель
 Menu, Tray, Add, Закрыть, ExitScript
-Menu, Tray, Tip, МЭРИЯ HELPER - Активен
-Menu, Tray, Icon, shell32.dll, 23
 
 ; ====================================================================================================
 ; ПОДКЛЮЧЕНИЕ БИБЛИОТЕК
@@ -2350,6 +2362,22 @@ ReloadScript:
     Reload
 return
 
+CheckUpdatesManual:
+    CheckForUpdates(true)
+return
+
+ShowAbout:
+    MsgBox, 4096, О программе,
+    (
+        МЭРИЯ HELPER v%ScriptVersion%
+        
+        Автор: Melanie Vanerlon
+        GitHub: https://github.com/skisasa56-max/merya-helper
+        
+        При запуске автоматически проверяется наличие обновлений.
+    )
+return
+
 MarkActivity() {
     global LastActivityTime, UserIsActive
     LastActivityTime := A_TickCount
@@ -2689,6 +2717,67 @@ return
 DragLicensesOrder:
     PostMessage, 0xA1, 2,,, A
 return
+
+; ====================================================================================================
+; СИСТЕМА АВТООБНОВЛЕНИЯ (ФУНКЦИИ)
+; ====================================================================================================
+CheckForUpdatesStartup:
+    CheckForUpdates(false)
+return
+
+CheckForUpdates(showMsg := false) {
+    global ScriptVersion, UpdateCheckUrl, ScriptDownloadUrl, UpdateTempFile, UpdateBatFile
+    tempVerFile := A_Temp "\mhelper_ver.txt"
+    try {
+        URLDownloadToFile, %UpdateCheckUrl%, %tempVerFile%
+        FileRead, remoteVer, %tempVerFile%
+        FileDelete, %tempVerFile%
+        remoteVer := Trim(remoteVer)
+        if (remoteVer = "") {
+            if showMsg
+                MsgBox, 4096, Ошибка, Не удалось получить версию с сервера.
+            return
+        }
+        if (remoteVer != ScriptVersion) {
+            answer := MsgBox, 4132, Доступно обновление, Версия %remoteVer% уже доступна.`nУ вас версия %ScriptVersion%.`nОбновить сейчас?
+            if (answer = "Yes") {
+                URLDownloadToFile, %ScriptDownloadUrl%, %UpdateTempFile%
+                if (ErrorLevel) {
+                    MsgBox, 4096, Ошибка, Не удалось скачать обновление.
+                    return
+                }
+                PerformUpdate()
+            }
+        } else if showMsg {
+            MsgBox, 4096, Обновления, У вас последняя версия %ScriptVersion%.
+        }
+    } catch e {
+        if showMsg
+            MsgBox, 4096, Ошибка, Не удалось соединиться с сервером обновлений.
+    }
+}
+
+PerformUpdate() {
+    global UpdateTempFile, UpdateBatFile, A_ScriptFullPath
+    FileDelete, %UpdateBatFile%
+    FileAppend,
+    (
+@echo off
+timeout /t 1 /nobreak > nul
+copy /y "%UpdateTempFile%" "%A_ScriptFullPath%"
+if errorlevel 1 (
+    echo Ошибка копирования. Запустите скрипт от имени администратора.
+    pause
+) else (
+    start "" "%A_ScriptFullPath%"
+)
+del "%UpdateTempFile%"
+del "%~f0"
+    ), %UpdateBatFile%
+    Run, %UpdateBatFile%, , Hide
+    SaveAllSettings()
+    ExitApp
+}
 
 ForceOpenMainGui:
     ; Если окно игры активно (развёрнуто), не показываем главное окно, оставляем скрипт в трее
