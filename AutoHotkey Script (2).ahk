@@ -1,20 +1,67 @@
 ; ====================================================================================================
-; МЭРИЯ HELPER v18.1 - ПОЛНОСТЬЮ РАБОЧАЯ ВЕРСИЯ + АДВОКАТСКИЙ МОДУЛЬ + СИСТЕМНЫЕ КОМБИНАЦИИ
+; МЭРИЯ HELPER v18.1
 ; ====================================================================================================
 #SingleInstance Force
 #NoEnv
 SetWorkingDir %A_ScriptDir%
 
 ; ====================================================================================================
-; НАСТРОЙКИ АВТООБНОВЛЕНИЯ
+; НАСТРОЙКИ АВТООБНОВЛЕНИЯ (СИНХРОННАЯ ПРОВЕРКА)
 ; ====================================================================================================
 global ScriptVersion := "18.2"
-global UpdateCheckUrl := "https://raw.githubusercontent.com/skisasa56-max/merya-helper/refs/heads/main/version.txt"
-global ScriptDownloadUrl := "https://raw.githubusercontent.com/skisasa56-max/merya-helper/refs/heads/main/AutoHotkey%20Script%20(2).ahk"
-global UpdateTempFile := A_ScriptDir "\update_temp.ahk"
-global UpdateBatFile := A_ScriptDir "\update.bat"
+global UpdateCheckUrl := "https://raw.githubusercontent.com/skisasa56-max/merya-helper/main/version.txt"
+global ScriptDownloadUrl := "https://raw.githubusercontent.com/skisasa56-max/merya-helper/main/AutoHotkey%20Script%20(2).ahk"
+global UpdateTempFile := A_Temp "\mhelper_new.ahk"
 
-SetTimer, CheckForUpdatesStartup, -2000
+; ФУНКЦИИ ОБНОВЛЕНИЯ (ДОЛЖНЫ БЫТЬ ОПРЕДЕЛЕНЫ ДО ВЫЗОВА)
+CheckForUpdates(showMsg := false) {
+    global ScriptVersion, UpdateCheckUrl, ScriptDownloadUrl, UpdateTempFile
+    tempVerFile := A_Temp "\mhelper_ver.txt"
+    URLDownloadToFile, %UpdateCheckUrl%, %tempVerFile%
+    if ErrorLevel {
+        if showMsg
+            MsgBox, 4096, Ошибка, Не удалось соединиться с сервером.
+        return 0
+    }
+    FileRead, remoteVer, %tempVerFile%
+    FileDelete, %tempVerFile%
+    remoteVer := Trim(remoteVer)
+    if (remoteVer = "") {
+        if showMsg
+            MsgBox, 4096, Ошибка, Пустая версия на сервере.
+        return 0
+    }
+    if (remoteVer != ScriptVersion) {
+        msgText = Версия %remoteVer% уже доступна. У вас версия %ScriptVersion%. Обновить сейчас?
+        answer := MsgBox, 4132, Доступно обновление, %msgText%
+        if (answer = "Yes") {
+            URLDownloadToFile, %ScriptDownloadUrl%, %UpdateTempFile%
+            if ErrorLevel {
+                MsgBox, 4096, Ошибка, Не удалось скачать обновление.
+                return 0
+            }
+            FileCopy, %UpdateTempFile%, %A_ScriptFullPath%, 1
+            if ErrorLevel {
+                MsgBox, 4096, Ошибка, Не удалось заменить файл. Запустите от администратора.
+                return 0
+            }
+            Run, "%A_ScriptFullPath%"
+            ExitApp
+        }
+        return 0
+    }
+    if showMsg
+        MsgBox, 4096, Обновления, У вас последняя версия %ScriptVersion%.
+    return 1
+}
+
+; СИНХРОННАЯ ПРОВЕРКА ПРИ СТАРТЕ (ЕСЛИ НЕТ ИНТЕРНЕТА – ЗАКРЫВАЕМСЯ)
+CheckForUpdates(true)
+if (ScriptVersion != "18.2") { ; если версия поменялась внутри, но проверка не прошла
+    MsgBox, 4096, Критическая ошибка, Не удалось подтвердить версию. Скрипт закрыт.
+    ExitApp
+}
+
 OnExit, SaveOnExit
 SetTimer, ForceOpenMainGui, -500
 
@@ -2717,57 +2764,6 @@ return
 DragLicensesOrder:
     PostMessage, 0xA1, 2,,, A
 return
-
-; ====================================================================================================
-; СИСТЕМА АВТООБНОВЛЕНИЯ
-; ====================================================================================================
-CheckForUpdatesStartup:
-    CheckForUpdates(false)
-return
-
-CheckForUpdates(showMsg := false) {
-    global ScriptVersion, UpdateCheckUrl, ScriptDownloadUrl, UpdateTempFile
-    tempVerFile := A_Temp "\mhelper_ver.txt"
-    try {
-        URLDownloadToFile, %UpdateCheckUrl%, %tempVerFile%
-        FileRead, remoteVer, %tempVerFile%
-        FileDelete, %tempVerFile%
-        remoteVer := Trim(remoteVer)
-        if (remoteVer = "") {
-            if showMsg
-                MsgBox, 4096, Ошибка, Не удалось получить версию с сервера.
-            return
-        }
-        if (remoteVer != ScriptVersion) {
-            msgText = Версия %remoteVer% уже доступна. У вас версия %ScriptVersion%. Обновить сейчас?
-            answer := MsgBox, 4132, Доступно обновление, %msgText%
-            if (answer = "Yes") {
-                URLDownloadToFile, %ScriptDownloadUrl%, %UpdateTempFile%
-                if (ErrorLevel) {
-                    MsgBox, 4096, Ошибка, Не удалось скачать обновление.
-                    return
-                }
-                PerformUpdate()
-            }
-        } else if showMsg {
-            MsgBox, 4096, Обновления, У вас последняя версия %ScriptVersion%.
-        }
-    } catch e {
-        if showMsg
-            MsgBox, 4096, Ошибка, Не удалось соединиться с сервером обновлений.
-    }
-}
-
-PerformUpdate() {
-    global UpdateTempFile
-    FileCopy, %UpdateTempFile%, %A_ScriptFullPath%, 1
-    if (ErrorLevel) {
-        MsgBox, 4096, Ошибка, Не удалось обновить файл. Возможно, скрипт запущен не от имени администратора.
-        return
-    }
-    Run, "%A_ScriptFullPath%"
-    ExitApp
-}
 
 ForceOpenMainGui:
     ; Если окно игры активно (развёрнуто), не показываем главное окно, оставляем скрипт в трее
