@@ -1,26 +1,26 @@
 ; ====================================================================================================
-; МЭРИЯ HELPER v18.1
+; ÐœÐ­Ð Ð˜Ð¯ HELPER v18.1
 ; ====================================================================================================
 #SingleInstance Force
 #NoEnv
 SetWorkingDir %A_ScriptDir%
 
 ; ====================================================================================================
-; НАСТРОЙКИ АВТООБНОВЛЕНИЯ (СИНХРОННАЯ ПРОВЕРКА)
+; ÐÐÐ¡Ð¢Ð ÐžÐ™ÐšÐ˜ ÐÐ’Ð¢ÐžÐžÐ‘ÐÐžÐ’Ð›Ð•ÐÐ˜Ð¯ (Ð¡Ð˜ÐÐ¥Ð ÐžÐÐÐÐ¯ ÐŸÐ ÐžÐ’Ð•Ð ÐšÐ)
 ; ====================================================================================================
 global ScriptVersion := "18.2"
 global UpdateCheckUrl := "https://raw.githubusercontent.com/skisasa56-max/merya-helper/main/version.txt"
 global ScriptDownloadUrl := "https://raw.githubusercontent.com/skisasa56-max/merya-helper/main/AutoHotkey%20Script%20(2).ahk"
 global UpdateTempFile := A_Temp "\mhelper_new.ahk"
 
-; ФУНКЦИИ ОБНОВЛЕНИЯ (ДОЛЖНЫ БЫТЬ ОПРЕДЕЛЕНЫ ДО ВЫЗОВА)
+; Ð¤Ð£ÐÐšÐ¦Ð˜Ð˜ ÐžÐ‘ÐÐžÐ’Ð›Ð•ÐÐ˜Ð¯ (Ð”ÐžÐ›Ð–ÐÐ« Ð‘Ð«Ð¢Ð¬ ÐžÐŸÐ Ð•Ð”Ð•Ð›Ð•ÐÐ« Ð”Ðž Ð’Ð«Ð—ÐžÐ’Ð)
 CheckForUpdates(showMsg := false) {
     global ScriptVersion, UpdateCheckUrl, ScriptDownloadUrl, UpdateTempFile
     tempVerFile := A_Temp "\mhelper_ver.txt"
     URLDownloadToFile, %UpdateCheckUrl%, %tempVerFile%
     if ErrorLevel {
         if showMsg
-            MsgBox, 4096, Ошибка, Не удалось соединиться с сервером.
+            MsgBox, 4096, ÐžÑˆÐ¸Ð±ÐºÐ°, ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ ÑÐ¾ÐµÐ´Ð¸Ð½Ð¸Ñ‚ÑŒÑÑ Ñ ÑÐµÑ€Ð²ÐµÑ€Ð¾Ð¼.
         return 0
     }
     FileRead, remoteVer, %tempVerFile%
@@ -28,21 +28,21 @@ CheckForUpdates(showMsg := false) {
     remoteVer := Trim(remoteVer)
     if (remoteVer = "") {
         if showMsg
-            MsgBox, 4096, Ошибка, Пустая версия на сервере.
+            MsgBox, 4096, ÐžÑˆÐ¸Ð±ÐºÐ°, ÐŸÑƒÑÑ‚Ð°Ñ Ð²ÐµÑ€ÑÐ¸Ñ Ð½Ð° ÑÐµÑ€Ð²ÐµÑ€Ðµ.
         return 0
     }
     if (remoteVer != ScriptVersion) {
-        msgText = Версия %remoteVer% уже доступна. У вас версия %ScriptVersion%. Обновить сейчас?
-        answer := MsgBox, 4132, Доступно обновление, %msgText%
+        msgText = Ð’ÐµÑ€ÑÐ¸Ñ %remoteVer% ÑƒÐ¶Ðµ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð°. Ð£ Ð²Ð°Ñ Ð²ÐµÑ€ÑÐ¸Ñ %ScriptVersion%. ÐžÐ±Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ ÑÐµÐ¹Ñ‡Ð°Ñ?
+        answer := MsgBox, 4132, Ð”Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð¾ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ, %msgText%
         if (answer = "Yes") {
             URLDownloadToFile, %ScriptDownloadUrl%, %UpdateTempFile%
             if ErrorLevel {
-                MsgBox, 4096, Ошибка, Не удалось скачать обновление.
+                MsgBox, 4096, ÐžÑˆÐ¸Ð±ÐºÐ°, ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ ÑÐºÐ°Ñ‡Ð°Ñ‚ÑŒ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ.
                 return 0
             }
             FileCopy, %UpdateTempFile%, %A_ScriptFullPath%, 1
             if ErrorLevel {
-                MsgBox, 4096, Ошибка, Не удалось заменить файл. Запустите от администратора.
+                MsgBox, 4096, ÐžÑˆÐ¸Ð±ÐºÐ°, ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð·Ð°Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ñ„Ð°Ð¹Ð». Ð—Ð°Ð¿ÑƒÑÑ‚Ð¸Ñ‚Ðµ Ð¾Ñ‚ Ð°Ð´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ‚Ð¾Ñ€Ð°.
                 return 0
             }
             Run, "%A_ScriptFullPath%"
@@ -51,14 +51,14 @@ CheckForUpdates(showMsg := false) {
         return 0
     }
     if showMsg
-        MsgBox, 4096, Обновления, У вас последняя версия %ScriptVersion%.
+        MsgBox, 4096, ÐžÐ±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ, Ð£ Ð²Ð°Ñ Ð¿Ð¾ÑÐ»ÐµÐ´Ð½ÑÑ Ð²ÐµÑ€ÑÐ¸Ñ %ScriptVersion%.
     return 1
 }
 
-; СИНХРОННАЯ ПРОВЕРКА ПРИ СТАРТЕ (ЕСЛИ НЕТ ИНТЕРНЕТА – ЗАКРЫВАЕМСЯ)
+; Ð¡Ð˜ÐÐ¥Ð ÐžÐÐÐÐ¯ ÐŸÐ ÐžÐ’Ð•Ð ÐšÐ ÐŸÐ Ð˜ Ð¡Ð¢ÐÐ Ð¢Ð• (Ð•Ð¡Ð›Ð˜ ÐÐ•Ð¢ Ð˜ÐÐ¢Ð•Ð ÐÐ•Ð¢Ð â€“ Ð—ÐÐšÐ Ð«Ð’ÐÐ•ÐœÐ¡Ð¯)
 CheckForUpdates(true)
-if (ScriptVersion != "18.2") { ; если версия поменялась внутри, но проверка не прошла
-    MsgBox, 4096, Критическая ошибка, Не удалось подтвердить версию. Скрипт закрыт.
+if (ScriptVersion != "18.2") { ; ÐµÑÐ»Ð¸ Ð²ÐµÑ€ÑÐ¸Ñ Ð¿Ð¾Ð¼ÐµÐ½ÑÐ»Ð°ÑÑŒ Ð²Ð½ÑƒÑ‚Ñ€Ð¸, Ð½Ð¾ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð½Ðµ Ð¿Ñ€Ð¾ÑˆÐ»Ð°
+    MsgBox, 4096, ÐšÑ€Ð¸Ñ‚Ð¸Ñ‡ÐµÑÐºÐ°Ñ Ð¾ÑˆÐ¸Ð±ÐºÐ°, ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¿Ð¾Ð´Ñ‚Ð²ÐµÑ€Ð´Ð¸Ñ‚ÑŒ Ð²ÐµÑ€ÑÐ¸ÑŽ. Ð¡ÐºÑ€Ð¸Ð¿Ñ‚ Ð·Ð°ÐºÑ€Ñ‹Ñ‚.
     ExitApp
 }
 
@@ -66,23 +66,23 @@ OnExit, SaveOnExit
 SetTimer, ForceOpenMainGui, -500
 
 ; ====================================================================================================
-; НАСТРОЙКИ ТРЕЯ
+; ÐÐÐ¡Ð¢Ð ÐžÐ™ÐšÐ˜ Ð¢Ð Ð•Ð¯
 ; ====================================================================================================
 Menu, Tray, NoStandard
-Menu, Tray, Add, Развернуть, RestoreFromTray
-Menu, Tray, Add, Проверить обновления, CheckUpdatesManual
-Menu, Tray, Add, О программе, ShowAbout
-Menu, Tray, Add  ; разделитель
-Menu, Tray, Add, Закрыть, ExitScript
+Menu, Tray, Add, Ð Ð°Ð·Ð²ÐµÑ€Ð½ÑƒÑ‚ÑŒ, RestoreFromTray
+Menu, Tray, Add, ÐŸÑ€Ð¾Ð²ÐµÑ€Ð¸Ñ‚ÑŒ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ, CheckUpdatesManual
+Menu, Tray, Add, Ðž Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ðµ, ShowAbout
+Menu, Tray, Add  ; Ñ€Ð°Ð·Ð´ÐµÐ»Ð¸Ñ‚ÐµÐ»ÑŒ
+Menu, Tray, Add, Ð—Ð°ÐºÑ€Ñ‹Ñ‚ÑŒ, ExitScript
 
 ; ====================================================================================================
-; ПОДКЛЮЧЕНИЕ БИБЛИОТЕК
+; ÐŸÐžÐ”ÐšÐ›Ð®Ð§Ð•ÐÐ˜Ð• Ð‘Ð˜Ð‘Ð›Ð˜ÐžÐ¢Ð•Ðš
 ; ====================================================================================================
 #Include %A_ScriptDir%\SAMP.ahk
 #Include %A_ScriptDir%\Class_CtlColors.ahk
 
 ; ====================================================================================================
-; ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ (ОСНОВНЫЕ)
+; Ð“Ð›ÐžÐ‘ÐÐ›Ð¬ÐÐ«Ð• ÐŸÐ•Ð Ð•ÐœÐ•ÐÐÐ«Ð• (ÐžÐ¡ÐÐžÐ’ÐÐ«Ð•)
 ; ====================================================================================================
 global BindDir := A_MyDocuments "\Binds"
 global BindIni := BindDir "\settings.ini"
@@ -136,14 +136,14 @@ global _historyReplyName := ""
 global _historyReplyText := ""
 global CurrentReplyName := ""
 global CityCode := "LV"
-global CityName := "Лас-Вентурас"
+global CityName := "Ð›Ð°Ñ-Ð’ÐµÐ½Ñ‚ÑƒÑ€Ð°Ñ"
 global LastActivityTime := 0
 global UserIsActive := 1
 global LicensesOrderGuiHwnd := 0
 global InstructionsGuiHwnd := 0
 
 
-global Tag := "Мэрия"
+global Tag := "ÐœÑÑ€Ð¸Ñ"
 global PendingCaseID := ""
 global PendingAcc := ""
 global SmsSent := false
@@ -154,14 +154,14 @@ global TargetID := ""
 global TargetName := ""
 global LicenseProcess := 0
 global WaitingForPayment := false
-global LawyerResult := 0 ; 0 - нет, 1 - оправдан, 2 - отказ
+global LawyerResult := 0 ; 0 - Ð½ÐµÑ‚, 1 - Ð¾Ð¿Ñ€Ð°Ð²Ð´Ð°Ð½, 2 - Ð¾Ñ‚ÐºÐ°Ð·
 global LawyerTargetName := ""
 
-global LicNames := ["управление наземным транспортом", "приобретение и ношение оружия", "управление водными судами", "эксплуатацию индивидуальных летательных аппаратов", "выполнение высотных полетов", "управление воздушным транспортом", "ведение предпринимательской деятельности"]
+global LicNames := ["ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð½Ð°Ð·ÐµÐ¼Ð½Ñ‹Ð¼ Ñ‚Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚Ð¾Ð¼", "Ð¿Ñ€Ð¸Ð¾Ð±Ñ€ÐµÑ‚ÐµÐ½Ð¸Ðµ Ð¸ Ð½Ð¾ÑˆÐµÐ½Ð¸Ðµ Ð¾Ñ€ÑƒÐ¶Ð¸Ñ", "ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð²Ð¾Ð´Ð½Ñ‹Ð¼Ð¸ ÑÑƒÐ´Ð°Ð¼Ð¸", "ÑÐºÑÐ¿Ð»ÑƒÐ°Ñ‚Ð°Ñ†Ð¸ÑŽ Ð¸Ð½Ð´Ð¸Ð²Ð¸Ð´ÑƒÐ°Ð»ÑŒÐ½Ñ‹Ñ… Ð»ÐµÑ‚Ð°Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ñ… Ð°Ð¿Ð¿Ð°Ñ€Ð°Ñ‚Ð¾Ð²", "Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ Ð²Ñ‹ÑÐ¾Ñ‚Ð½Ñ‹Ñ… Ð¿Ð¾Ð»ÐµÑ‚Ð¾Ð²", "ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð²Ð¾Ð·Ð´ÑƒÑˆÐ½Ñ‹Ð¼ Ñ‚Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚Ð¾Ð¼", "Ð²ÐµÐ´ÐµÐ½Ð¸Ðµ Ð¿Ñ€ÐµÐ´Ð¿Ñ€Ð¸Ð½Ð¸Ð¼Ð°Ñ‚ÐµÐ»ÑŒÑÐºÐ¾Ð¹ Ð´ÐµÑÑ‚ÐµÐ»ÑŒÐ½Ð¾ÑÑ‚Ð¸"]
 global LicPrices := [400, 125000, 25000, 5000, 15000, 30000, 250000]
 
 ; ====================================================================================================
-; ИНИЦИАЛИЗАЦИЯ
+; Ð˜ÐÐ˜Ð¦Ð˜ÐÐ›Ð˜Ð—ÐÐ¦Ð˜Ð¯
 ; ====================================================================================================
 if !FileExist(BindDir)
     FileCreateDir, %BindDir%
@@ -186,7 +186,7 @@ LoadPrizeHistory()
 RegisterAllBinderHotkeys()
 SetTimer, CheckAutoProfile, 25
 SetTimer, MonitorChat, 300
-SetTimer, CheckIdle, 60000   ; проверка каждую минуту
+SetTimer, CheckIdle, 60000   ; Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° ÐºÐ°Ð¶Ð´ÑƒÑŽ Ð¼Ð¸Ð½ÑƒÑ‚Ñƒ
 if (AutoTimeActive = 1)
     StartAutoTime()
 
@@ -198,26 +198,26 @@ if (AutoTimeActive = 1)
 ;     Reload
 ; return
 
-; Адвокатские горячие клавиши
-^1:: LawyerConditions()          ; Ctrl+1 - условия адвоката
+; ÐÐ´Ð²Ð¾ÐºÐ°Ñ‚ÑÐºÐ¸Ðµ Ð³Ð¾Ñ€ÑÑ‡Ð¸Ðµ ÐºÐ»Ð°Ð²Ð¸ÑˆÐ¸
+^1:: LawyerConditions()          ; Ctrl+1 - ÑƒÑÐ»Ð¾Ð²Ð¸Ñ Ð°Ð´Ð²Ð¾ÐºÐ°Ñ‚Ð°
 !1::
     if (UserNick = "")
-        SendChat(".фд Я — сотрудник мэрии " CityName "*коснувшись пальцем бейджа")
+        SendChat(".Ñ„Ð´ Ð¯ â€” ÑÐ¾Ñ‚Ñ€ÑƒÐ´Ð½Ð¸Ðº Ð¼ÑÑ€Ð¸Ð¸ " CityName "*ÐºÐ¾ÑÐ½ÑƒÐ²ÑˆÐ¸ÑÑŒ Ð¿Ð°Ð»ÑŒÑ†ÐµÐ¼ Ð±ÐµÐ¹Ð´Ð¶Ð°")
     else if (Gender == 1)
-        SendChat(".фд Я — " UserNick ", сотрудник мэрии " CityName "*коснувшись пальцем бейджа")
+        SendChat(".Ñ„Ð´ Ð¯ â€” " UserNick ", ÑÐ¾Ñ‚Ñ€ÑƒÐ´Ð½Ð¸Ðº Ð¼ÑÑ€Ð¸Ð¸ " CityName "*ÐºÐ¾ÑÐ½ÑƒÐ²ÑˆÐ¸ÑÑŒ Ð¿Ð°Ð»ÑŒÑ†ÐµÐ¼ Ð±ÐµÐ¹Ð´Ð¶Ð°")
     else
-        SendChat(".фд Я — " UserNick ", сотрудница мэрии " CityName "*коснувшись пальцем бейджа")
+        SendChat(".Ñ„Ð´ Ð¯ â€” " UserNick ", ÑÐ¾Ñ‚Ñ€ÑƒÐ´Ð½Ð¸Ñ†Ð° Ð¼ÑÑ€Ð¸Ð¸ " CityName "*ÐºÐ¾ÑÐ½ÑƒÐ²ÑˆÐ¸ÑÑŒ Ð¿Ð°Ð»ÑŒÑ†ÐµÐ¼ Ð±ÐµÐ¹Ð´Ð¶Ð°")
 return
 !2:: ShowLicensesList()
 !3::
     LicenseMenuMode := 1
-    addChatMessage("{FF0000}[" Tag "] {33AAFF}Режим цены: {FFFFFF}Нажмите {FFFF00}1-7 {FFFFFF}для оглашения стоимости.")
+    addChatMessage("{FF0000}[" Tag "] {33AAFF}Ð ÐµÐ¶Ð¸Ð¼ Ñ†ÐµÐ½Ñ‹: {FFFFFF}ÐÐ°Ð¶Ð¼Ð¸Ñ‚Ðµ {FFFF00}1-7 {FFFFFF}Ð´Ð»Ñ Ð¾Ð³Ð»Ð°ÑˆÐµÐ½Ð¸Ñ ÑÑ‚Ð¾Ð¸Ð¼Ð¾ÑÑ‚Ð¸.")
 return
 !4::
     LicenseMenuMode := 2
     TempTotal := 0
     LastPrice := 0
-    addChatMessage("{FF0000}[" Tag "] {00FF00}Режим суммы: {FFFFFF}Выбирайте {FFFF00}1-7{FFFFFF}. Итог: {FFA500}Backspace{FFFFFF}. Отмена: {FF4500}Delete{FFFFFF}.")
+    addChatMessage("{FF0000}[" Tag "] {00FF00}Ð ÐµÐ¶Ð¸Ð¼ ÑÑƒÐ¼Ð¼Ñ‹: {FFFFFF}Ð’Ñ‹Ð±Ð¸Ñ€Ð°Ð¹Ñ‚Ðµ {FFFF00}1-7{FFFFFF}. Ð˜Ñ‚Ð¾Ð³: {FFA500}Backspace{FFFFFF}. ÐžÑ‚Ð¼ÐµÐ½Ð°: {FF4500}Delete{FFFFFF}.")
 return
 
 #If WinActive("ahk_exe gta_sa.exe")
@@ -225,10 +225,10 @@ NumpadAdd:: SendInput, {F6}/pagesize 30{Enter}
 NumpadSub:: SendInput, {F6}/pagesize 10{Enter}
 #If
 
-Home:: SendChat("/фракция")
+Home:: SendChat("/Ñ„Ñ€Ð°ÐºÑ†Ð¸Ñ")
 
 !Delete::
-    addChatMessage("{00FF00}[" Tag "] Перезагрузка биндера, это может занять несколько секунд...")
+    addChatMessage("{00FF00}[" Tag "] ÐŸÐµÑ€ÐµÐ·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ° Ð±Ð¸Ð½Ð´ÐµÑ€Ð°, ÑÑ‚Ð¾ Ð¼Ð¾Ð¶ÐµÑ‚ Ð·Ð°Ð½ÑÑ‚ÑŒ Ð½ÐµÑÐºÐ¾Ð»ÑŒÐºÐ¾ ÑÐµÐºÑƒÐ½Ð´...")
     if (TimerGuiHwnd)
         Gui, TimerGui:Destroy
     if (BinderGuiHwnd)
@@ -247,7 +247,7 @@ Home:: SendChat("/фракция")
     Reload
 return
 
-:O:/автопрофиль::
+:O:/Ð°Ð²Ñ‚Ð¾Ð¿Ñ€Ð¾Ñ„Ð¸Ð»ÑŒ::
     AutoProfileActive := 1
     AutoProfileStep := 0
     AutoProfilePressCount := 0
@@ -261,7 +261,7 @@ return
 return
 
 ; ====================================================================================================
-; ПЕРЕХВАТ ENTER ДЛЯ КОМАНД
+; ÐŸÐ•Ð Ð•Ð¥Ð’ÐÐ¢ ENTER Ð”Ð›Ð¯ ÐšÐžÐœÐÐÐ”
 ; ====================================================================================================
 ~$Enter::
 ~$NumpadEnter::
@@ -272,30 +272,30 @@ return
         ClipWait, 0.1
         chatText := Clipboard
 
-        ; Команда /лица
-        if (RegExMatch(chatText, "i)^[/\.](лица|lics)\s+(\d+)", Match)) {
+        ; ÐšÐ¾Ð¼Ð°Ð½Ð´Ð° /Ð»Ð¸Ñ†Ð°
+        if (RegExMatch(chatText, "i)^[/\.](Ð»Ð¸Ñ†Ð°|lics)\s+(\d+)", Match)) {
             SendInput, {CtrlDown}a{CtrlUp}{Backspace}{Enter}
             TargetID := Match2
             RawName := getPlayerNameById(TargetID)
             TargetName := StrReplace(RawName, "_", " ")
             if (TargetName == "") {
-                addChatMessage("{FF0000}[" Tag "] {FFFFFF}Игрок с таким ID не найден.")
+                addChatMessage("{FF0000}[" Tag "] {FFFFFF}Ð˜Ð³Ñ€Ð¾Ðº Ñ Ñ‚Ð°ÐºÐ¸Ð¼ ID Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½.")
                 return
             }
-            addChatMessage("{FF0000}[" Tag "] {00FF00}Продаю лицензию: {FFFFFF}" TargetName)
+            addChatMessage("{FF0000}[" Tag "] {00FF00}ÐŸÑ€Ð¾Ð´Ð°ÑŽ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸ÑŽ: {FFFFFF}" TargetName)
             LicenseProcess := 1
-            SendChat("Пожалуйста, предъявите ваш паспорт для оформления документов.")
+            SendChat("ÐŸÐ¾Ð¶Ð°Ð»ÑƒÐ¹ÑÑ‚Ð°, Ð¿Ñ€ÐµÐ´ÑŠÑÐ²Ð¸Ñ‚Ðµ Ð²Ð°Ñˆ Ð¿Ð°ÑÐ¿Ð¾Ñ€Ñ‚ Ð´Ð»Ñ Ð¾Ñ„Ð¾Ñ€Ð¼Ð»ÐµÐ½Ð¸Ñ Ð´Ð¾ÐºÑƒÐ¼ÐµÐ½Ñ‚Ð¾Ð².")
             Clipboard := SavedClipboard
             return
         }
 
-        ; Команда /вып
-        if (RegExMatch(chatText, "i)^[/\.](вып|кпз|vip)\s+(\d+)", Match)) {
+        ; ÐšÐ¾Ð¼Ð°Ð½Ð´Ð° /Ð²Ñ‹Ð¿
+        if (RegExMatch(chatText, "i)^[/\.](Ð²Ñ‹Ð¿|ÐºÐ¿Ð·|vip)\s+(\d+)", Match)) {
             SendInput, {CtrlDown}a{CtrlUp}{Backspace}{Enter}
             TargetID_Law := Match2
             LawRawName := getPlayerNameById(TargetID_Law)
             LawFullName := LawRawName ? StrReplace(LawRawName, "_", " ") : TargetID_Law
-            addChatMessage("{FF0000}[" Tag "] {FFFFFF}Работаю по: {33AAFF}" LawFullName)
+            addChatMessage("{FF0000}[" Tag "] {FFFFFF}Ð Ð°Ð±Ð¾Ñ‚Ð°ÑŽ Ð¿Ð¾: {33AAFF}" LawFullName)
             Data := GetDataFromIngameDialog(TargetID_Law, false)
             if (Data.Acc != "") {
                 PendingAcc := Data.Acc
@@ -308,30 +308,30 @@ return
             return
         }
 
-        ; Команда /инф
-        if (RegExMatch(chatText, "i)^[/\.](инф|inf)\s+(.+)", Match)) {
+        ; ÐšÐ¾Ð¼Ð°Ð½Ð´Ð° /Ð¸Ð½Ñ„
+        if (RegExMatch(chatText, "i)^[/\.](Ð¸Ð½Ñ„|inf)\s+(.+)", Match)) {
             SendInput, {CtrlDown}a{CtrlUp}{Backspace}{Enter}
             Target := Match2
             if (RegExMatch(Target, "^\d+$")) {
                 pName := getPlayerNameById(Target)
-                addChatMessage("{FF0000}[" Tag "] {FFFFFF}Собираю информаицю на: {33AAFF}" (pName ? StrReplace(pName, "_", " ") : Target) "...")
+                addChatMessage("{FF0000}[" Tag "] {FFFFFF}Ð¡Ð¾Ð±Ð¸Ñ€Ð°ÑŽ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ð¸Ñ†ÑŽ Ð½Ð°: {33AAFF}" (pName ? StrReplace(pName, "_", " ") : Target) "...")
                 Data := GetDataFromIngameDialog(Target, true)
                 if (Data.Acc != "") {
-                    addChatMessage("{FF0000}============ Информация о игроке ============")
-                    addChatMessage("{FFFFFF}Ник: {33AAFF}" Data.Name " {FFFFFF}| Аккаунт: {FFFF00}" Data.Acc)
-                    addChatMessage("{FFFFFF}Уровень: {00FF00}" Data.LVL " {FFFFFF}")
+                    addChatMessage("{FF0000}============ Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ Ð¾ Ð¸Ð³Ñ€Ð¾ÐºÐµ ============")
+                    addChatMessage("{FFFFFF}ÐÐ¸Ðº: {33AAFF}" Data.Name " {FFFFFF}| ÐÐºÐºÐ°ÑƒÐ½Ñ‚: {FFFF00}" Data.Acc)
+                    addChatMessage("{FFFFFF}Ð£Ñ€Ð¾Ð²ÐµÐ½ÑŒ: {00FF00}" Data.LVL " {FFFFFF}")
                     if (Data.Bday)
-                        addChatMessage("{FFFFFF}Дата рождения: {33AAFF}" Data.Bday)
+                        addChatMessage("{FFFFFF}Ð”Ð°Ñ‚Ð° Ñ€Ð¾Ð¶Ð´ÐµÐ½Ð¸Ñ: {33AAFF}" Data.Bday)
                     if (Data.Org)
-                        addChatMessage("{FFFFFF}Организация: {33AAFF}" Data.Org)
+                        addChatMessage("{FFFFFF}ÐžÑ€Ð³Ð°Ð½Ð¸Ð·Ð°Ñ†Ð¸Ñ: {33AAFF}" Data.Org)
                     if (Data.House)
-                        addChatMessage("{FFFFFF}Дом: {33AAFF}" Data.House)
+                        addChatMessage("{FFFFFF}Ð”Ð¾Ð¼: {33AAFF}" Data.House)
                     if (Data.Car)
-                        addChatMessage("{FFFFFF}Транспорт: {33AAFF}" Data.Car)
-                    if (Data.Family != "" && Data.Family != "Скрыто")
-                        addChatMessage("{FFFFFF}Семья: {33AAFF}" Data.Family)
+                        addChatMessage("{FFFFFF}Ð¢Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚: {33AAFF}" Data.Car)
+                    if (Data.Family != "" && Data.Family != "Ð¡ÐºÑ€Ñ‹Ñ‚Ð¾")
+                        addChatMessage("{FFFFFF}Ð¡ÐµÐ¼ÑŒÑ: {33AAFF}" Data.Family)
                     if (Data.Rep)
-                        addChatMessage("{FFFFFF}Репутация: {00FF00}" Data.Rep)
+                        addChatMessage("{FFFFFF}Ð ÐµÐ¿ÑƒÑ‚Ð°Ñ†Ð¸Ñ: {00FF00}" Data.Rep)
                     addChatMessage("{FF0000}====================================")
                 }
             }
@@ -345,7 +345,7 @@ return
 return
 
 ; ====================================================================================================
-; ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+; Ð’Ð¡ÐŸÐžÐœÐžÐ“ÐÐ¢Ð•Ð›Ð¬ÐÐ«Ð• Ð¤Ð£ÐÐšÐ¦Ð˜Ð˜
 ; ====================================================================================================
 ShowNotification(title, message, timeoutMs := 5000) {
     TrayTip, %title%, %message%, 20, 1
@@ -357,48 +357,48 @@ return
 
 LawyerConditions() {
     if (WaitingForPayment) {
-        SendChat("Назовите Имя и Фамилию задержанного")
+        SendChat("ÐÐ°Ð·Ð¾Ð²Ð¸Ñ‚Ðµ Ð˜Ð¼Ñ Ð¸ Ð¤Ð°Ð¼Ð¸Ð»Ð¸ÑŽ Ð·Ð°Ð´ÐµÑ€Ð¶Ð°Ð½Ð½Ð¾Ð³Ð¾")
     } else {
-        SendChat("Я адвокат города " CityName ". Давайте перейдем к делу.")
+        SendChat("Ð¯ Ð°Ð´Ð²Ð¾ÐºÐ°Ñ‚ Ð³Ð¾Ñ€Ð¾Ð´Ð° " CityName ". Ð”Ð°Ð²Ð°Ð¹Ñ‚Ðµ Ð¿ÐµÑ€ÐµÐ¹Ð´ÐµÐ¼ Ðº Ð´ÐµÐ»Ñƒ.")
         Sleep 1950
-        SendChat("Озвучу вам условия нашей работы:")
+        SendChat("ÐžÐ·Ð²ÑƒÑ‡Ñƒ Ð²Ð°Ð¼ ÑƒÑÐ»Ð¾Ð²Ð¸Ñ Ð½Ð°ÑˆÐµÐ¹ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹:")
         Sleep 1950
-        SendChat("Во-первых: интервал между повторными запросами на одного человека составляет 14 часов.")
+        SendChat("Ð’Ð¾-Ð¿ÐµÑ€Ð²Ñ‹Ñ…: Ð¸Ð½Ñ‚ÐµÑ€Ð²Ð°Ð» Ð¼ÐµÐ¶Ð´Ñƒ Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€Ð½Ñ‹Ð¼Ð¸ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ°Ð¼Ð¸ Ð½Ð° Ð¾Ð´Ð½Ð¾Ð³Ð¾ Ñ‡ÐµÐ»Ð¾Ð²ÐµÐºÐ° ÑÐ¾ÑÑ‚Ð°Ð²Ð»ÑÐµÑ‚ 14 Ñ‡Ð°ÑÐ¾Ð².")
         Sleep 1950
-        SendChat("Во-вторых: денежные средства не возвращаются, если по дело был получен отказ.")
+        SendChat("Ð’Ð¾-Ð²Ñ‚Ð¾Ñ€Ñ‹Ñ…: Ð´ÐµÐ½ÐµÐ¶Ð½Ñ‹Ðµ ÑÑ€ÐµÐ´ÑÑ‚Ð²Ð° Ð½Ðµ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÑŽÑ‚ÑÑ, ÐµÑÐ»Ð¸ Ð¿Ð¾ Ð´ÐµÐ»Ð¾ Ð±Ñ‹Ð» Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½ Ð¾Ñ‚ÐºÐ°Ð·.")
         Sleep 1950
-        SendChat("В-третьих: максимальный срок отбывания не должен превышать 2-х часов.")
+        SendChat("Ð’-Ñ‚Ñ€ÐµÑ‚ÑŒÐ¸Ñ…: Ð¼Ð°ÐºÑÐ¸Ð¼Ð°Ð»ÑŒÐ½Ñ‹Ð¹ ÑÑ€Ð¾Ðº Ð¾Ñ‚Ð±Ñ‹Ð²Ð°Ð½Ð¸Ñ Ð½Ðµ Ð´Ð¾Ð»Ð¶ÐµÐ½ Ð¿Ñ€ÐµÐ²Ñ‹ÑˆÐ°Ñ‚ÑŒ 2-Ñ… Ñ‡Ð°ÑÐ¾Ð².")
         Sleep 1950
-        SendChat("Если условия вам понятны и вы их принимаете, назовите имя и фамилию заключенного")
+        SendChat("Ð•ÑÐ»Ð¸ ÑƒÑÐ»Ð¾Ð²Ð¸Ñ Ð²Ð°Ð¼ Ð¿Ð¾Ð½ÑÑ‚Ð½Ñ‹ Ð¸ Ð²Ñ‹ Ð¸Ñ… Ð¿Ñ€Ð¸Ð½Ð¸Ð¼Ð°ÐµÑ‚Ðµ, Ð½Ð°Ð·Ð¾Ð²Ð¸Ñ‚Ðµ Ð¸Ð¼Ñ Ð¸ Ñ„Ð°Ð¼Ð¸Ð»Ð¸ÑŽ Ð·Ð°ÐºÐ»ÑŽÑ‡ÐµÐ½Ð½Ð¾Ð³Ð¾")
         Sleep 1950
-        SendChat("и произведите оплату в размере 50.000$.")
+        SendChat("Ð¸ Ð¿Ñ€Ð¾Ð¸Ð·Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¾Ð¿Ð»Ð°Ñ‚Ñƒ Ð² Ñ€Ð°Ð·Ð¼ÐµÑ€Ðµ 50.000$.")
         WaitingForPayment := true
     }
 }
 
 ShowLicensesList() {
-    addChatMessage("{FF0000}[" Tag "] {33AAFF}Перечень и стоимость государственных лицензий")
+    addChatMessage("{FF0000}[" Tag "] {33AAFF}ÐŸÐµÑ€ÐµÑ‡ÐµÐ½ÑŒ Ð¸ ÑÑ‚Ð¾Ð¸Ð¼Ð¾ÑÑ‚ÑŒ Ð³Ð¾ÑÑƒÐ´Ð°Ñ€ÑÑ‚Ð²ÐµÐ½Ð½Ñ‹Ñ… Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¹")
     Sleep, 150
-    SendChat("Лицензия на управление наземным транспортом — 400$")
+    SendChat("Ð›Ð¸Ñ†ÐµÐ½Ð·Ð¸Ñ Ð½Ð° ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð½Ð°Ð·ÐµÐ¼Ð½Ñ‹Ð¼ Ñ‚Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚Ð¾Ð¼ â€” 400$")
     Sleep, 1950
-    SendChat("Лицензия на приобретение и ношение оружия — 125.000$")
+    SendChat("Ð›Ð¸Ñ†ÐµÐ½Ð·Ð¸Ñ Ð½Ð° Ð¿Ñ€Ð¸Ð¾Ð±Ñ€ÐµÑ‚ÐµÐ½Ð¸Ðµ Ð¸ Ð½Ð¾ÑˆÐµÐ½Ð¸Ðµ Ð¾Ñ€ÑƒÐ¶Ð¸Ñ â€” 125.000$")
     Sleep, 1950
-    SendChat("Лицензия на управление водными судами — 25.000$")
+    SendChat("Ð›Ð¸Ñ†ÐµÐ½Ð·Ð¸Ñ Ð½Ð° ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð²Ð¾Ð´Ð½Ñ‹Ð¼Ð¸ ÑÑƒÐ´Ð°Ð¼Ð¸ â€” 25.000$")
     Sleep, 1950
-    SendChat("Разрешение на эксплуатацию индивидуальных летательных аппаратов — 5.000$")
+    SendChat("Ð Ð°Ð·Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ Ð½Ð° ÑÐºÑÐ¿Ð»ÑƒÐ°Ñ‚Ð°Ñ†Ð¸ÑŽ Ð¸Ð½Ð´Ð¸Ð²Ð¸Ð´ÑƒÐ°Ð»ÑŒÐ½Ñ‹Ñ… Ð»ÐµÑ‚Ð°Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ñ… Ð°Ð¿Ð¿Ð°Ñ€Ð°Ñ‚Ð¾Ð² â€” 5.000$")
     Sleep, 1950
-    SendChat("Разрешение на выполнение высотных полетов — 15.000$")
+    SendChat("Ð Ð°Ð·Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ Ð½Ð° Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ Ð²Ñ‹ÑÐ¾Ñ‚Ð½Ñ‹Ñ… Ð¿Ð¾Ð»ÐµÑ‚Ð¾Ð² â€” 15.000$")
     Sleep, 1950
-    SendChat("Лицензия на управление воздушным транспортом — 30.000$")
+    SendChat("Ð›Ð¸Ñ†ÐµÐ½Ð·Ð¸Ñ Ð½Ð° ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð²Ð¾Ð·Ð´ÑƒÑˆÐ½Ñ‹Ð¼ Ñ‚Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚Ð¾Ð¼ â€” 30.000$")
     Sleep, 1950
-    SendChat("Лицензия на ведение предпринимательской деятельности — 250.000$")
+    SendChat("Ð›Ð¸Ñ†ÐµÐ½Ð·Ð¸Ñ Ð½Ð° Ð²ÐµÐ´ÐµÐ½Ð¸Ðµ Ð¿Ñ€ÐµÐ´Ð¿Ñ€Ð¸Ð½Ð¸Ð¼Ð°Ñ‚ÐµÐ»ÑŒÑÐºÐ¾Ð¹ Ð´ÐµÑÑ‚ÐµÐ»ÑŒÐ½Ð¾ÑÑ‚Ð¸ â€” 250.000$")
 }
 
 GetDataFromIngameDialog(ID, FullScan := false) {
     Result := {Name: "", Acc: "", LVL: "", Phone: "", Org: "", Bday: "", House: "", Family: "", Rep: "", Car: ""}
     RawName := getPlayerNameById(ID)
     Result.Name := StrReplace(RawName, "_", " ")
-    SendChat("/и " ID)
+    SendChat("/Ð¸ " ID)
     Loop, 15 {
         if isDialogOpen()
             break
@@ -418,21 +418,21 @@ GetDataFromIngameDialog(ID, FullScan := false) {
         if (Line == "")
             continue
         CleanLine := RegExReplace(Line, "\{[a-fA-F0-9]{6}\}", "")
-        if (RegExMatch(CleanLine, "i)Имя:\s*([A-Za-z_]+)", M))
+        if (RegExMatch(CleanLine, "i)Ð˜Ð¼Ñ:\s*([A-Za-z_]+)", M))
             Result.Name := StrReplace(M1, "_", " ")
-        if (RegExMatch(CleanLine, "i)Номер аккаунта:.*?[^\d]*(\d+)", M))
+        if (RegExMatch(CleanLine, "i)ÐÐ¾Ð¼ÐµÑ€ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°:.*?[^\d]*(\d+)", M))
             Result.Acc := M1
-        if (RegExMatch(CleanLine, "i)Уровень:.*?[^\d]*(\d+)", M))
+        if (RegExMatch(CleanLine, "i)Ð£Ñ€Ð¾Ð²ÐµÐ½ÑŒ:.*?[^\d]*(\d+)", M))
             Result.LVL := M1
-        if (RegExMatch(CleanLine, "i)День рождения:\s*(\d{1,2})\s(\d{1,2})\s(\d{4})", M))
+        if (RegExMatch(CleanLine, "i)Ð”ÐµÐ½ÑŒ Ñ€Ð¾Ð¶Ð´ÐµÐ½Ð¸Ñ:\s*(\d{1,2})\s(\d{1,2})\s(\d{4})", M))
             Result.Bday := M1 "/" M2 "/" M3
-        if (RegExMatch(CleanLine, "i)Дом:\s*(\d+)\s*\((.*?)\)", M))
+        if (RegExMatch(CleanLine, "i)Ð”Ð¾Ð¼:\s*(\d+)\s*\((.*?)\)", M))
             Result.House := M1 ": " M2
-        if (RegExMatch(CleanLine, "i)Организация:\s*(.*)", M))
+        if (RegExMatch(CleanLine, "i)ÐžÑ€Ð³Ð°Ð½Ð¸Ð·Ð°Ñ†Ð¸Ñ:\s*(.*)", M))
             Result.Org := Trim(M1)
-        if (RegExMatch(CleanLine, "i)Репутация:\s*([\+\-]?\d+)", M))
+        if (RegExMatch(CleanLine, "i)Ð ÐµÐ¿ÑƒÑ‚Ð°Ñ†Ð¸Ñ:\s*([\+\-]?\d+)", M))
             Result.Rep := M1
-        if (RegExMatch(CleanLine, "i)Транспорт:\s*(.*)", M))
+        if (RegExMatch(CleanLine, "i)Ð¢Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚:\s*(.*)", M))
             Result.Car := Trim(M1)
         if (!FullScan && Result.Acc != "")
             break
@@ -446,78 +446,78 @@ GetDataFromIngameDialog(ID, FullScan := false) {
 StartLawyerRP:
     if (PendingAcc = "")
         return
-    SendChat("/todo Сейчас посмотрим что возможно тут решить*включая компьютер")
+    SendChat("/todo Ð¡ÐµÐ¹Ñ‡Ð°Ñ Ð¿Ð¾ÑÐ¼Ð¾Ñ‚Ñ€Ð¸Ð¼ Ñ‡Ñ‚Ð¾ Ð²Ð¾Ð·Ð¼Ð¾Ð¶Ð½Ð¾ Ñ‚ÑƒÑ‚ Ñ€ÐµÑˆÐ¸Ñ‚ÑŒ*Ð²ÐºÐ»ÑŽÑ‡Ð°Ñ ÐºÐ¾Ð¼Ð¿ÑŒÑŽÑ‚ÐµÑ€")
     Sleep 2099
-    SendChat("/do Компьютер включён")
-    Sleep 2099
-    if (Gender == 1)
-        SendChat("/me запустил базу данных МВД и ввёл код государственного адвоката")
-    else
-        SendChat("/me запустила базу данных МВД и ввела код государственного адвоката")
+    SendChat("/do ÐšÐ¾Ð¼Ð¿ÑŒÑŽÑ‚ÐµÑ€ Ð²ÐºÐ»ÑŽÑ‡Ñ‘Ð½")
     Sleep 2099
     if (Gender == 1)
-        SendChat("/me нашёл личное дело клиента в базе данных")
+        SendChat("/me Ð·Ð°Ð¿ÑƒÑÑ‚Ð¸Ð» Ð±Ð°Ð·Ñƒ Ð´Ð°Ð½Ð½Ñ‹Ñ… ÐœÐ’Ð” Ð¸ Ð²Ð²Ñ‘Ð» ÐºÐ¾Ð´ Ð³Ð¾ÑÑƒÐ´Ð°Ñ€ÑÑ‚Ð²ÐµÐ½Ð½Ð¾Ð³Ð¾ Ð°Ð´Ð²Ð¾ÐºÐ°Ñ‚Ð°")
     else
-        SendChat("/me нашла личное дело клиента в базе данных")
+        SendChat("/me Ð·Ð°Ð¿ÑƒÑÑ‚Ð¸Ð»Ð° Ð±Ð°Ð·Ñƒ Ð´Ð°Ð½Ð½Ñ‹Ñ… ÐœÐ’Ð” Ð¸ Ð²Ð²ÐµÐ»Ð° ÐºÐ¾Ð´ Ð³Ð¾ÑÑƒÐ´Ð°Ñ€ÑÑ‚Ð²ÐµÐ½Ð½Ð¾Ð³Ð¾ Ð°Ð´Ð²Ð¾ÐºÐ°Ñ‚Ð°")
     Sleep 2099
     if (Gender == 1)
-        SendChat("/me открыл дело №" PendingAcc " и изучил материалы")
+        SendChat("/me Ð½Ð°ÑˆÑ‘Ð» Ð»Ð¸Ñ‡Ð½Ð¾Ðµ Ð´ÐµÐ»Ð¾ ÐºÐ»Ð¸ÐµÐ½Ñ‚Ð° Ð² Ð±Ð°Ð·Ðµ Ð´Ð°Ð½Ð½Ñ‹Ñ…")
     else
-        SendChat("/me открыла дело №" PendingAcc " и изучила материалы")
+        SendChat("/me Ð½Ð°ÑˆÐ»Ð° Ð»Ð¸Ñ‡Ð½Ð¾Ðµ Ð´ÐµÐ»Ð¾ ÐºÐ»Ð¸ÐµÐ½Ñ‚Ð° Ð² Ð±Ð°Ð·Ðµ Ð´Ð°Ð½Ð½Ñ‹Ñ…")
+    Sleep 2099
+    if (Gender == 1)
+        SendChat("/me Ð¾Ñ‚ÐºÑ€Ñ‹Ð» Ð´ÐµÐ»Ð¾ â„–" PendingAcc " Ð¸ Ð¸Ð·ÑƒÑ‡Ð¸Ð» Ð¼Ð°Ñ‚ÐµÑ€Ð¸Ð°Ð»Ñ‹")
+    else
+        SendChat("/me Ð¾Ñ‚ÐºÑ€Ñ‹Ð»Ð° Ð´ÐµÐ»Ð¾ â„–" PendingAcc " Ð¸ Ð¸Ð·ÑƒÑ‡Ð¸Ð»Ð° Ð¼Ð°Ñ‚ÐµÑ€Ð¸Ð°Ð»Ñ‹")
     Sleep 1000
-    SendChat("/смс 5055 Передаю на рассмотрение дело №" PendingAcc "/" PendingCaseID)
+    SendChat("/ÑÐ¼Ñ 5055 ÐŸÐµÑ€ÐµÐ´Ð°ÑŽ Ð½Ð° Ñ€Ð°ÑÑÐ¼Ð¾Ñ‚Ñ€ÐµÐ½Ð¸Ðµ Ð´ÐµÐ»Ð¾ â„–" PendingAcc "/" PendingCaseID)
     SmsSent := true
     SetTimer, LawyerSmsTimeout, -10000
 return
 
 LawyerSmsTimeout:
     if (SmsSent) {
-        addChatMessage("{FF0000}[" Tag "] {FFFFFF}Запрос отправлен. {00FF00}1 - Ок {FFFFFF}| {FF0000}0 - Отмена")
+        addChatMessage("{FF0000}[" Tag "] {FFFFFF}Ð—Ð°Ð¿Ñ€Ð¾Ñ Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½. {00FF00}1 - ÐžÐº {FFFFFF}| {FF0000}0 - ÐžÑ‚Ð¼ÐµÐ½Ð°")
     }
 return
 
 StartLicenseRP:
     if (Gender == 1)
-        SendChat("/me достал из кармана служебный планшет, разблокировав его отпечатком пальца.")
+        SendChat("/me Ð´Ð¾ÑÑ‚Ð°Ð» Ð¸Ð· ÐºÐ°Ñ€Ð¼Ð°Ð½Ð° ÑÐ»ÑƒÐ¶ÐµÐ±Ð½Ñ‹Ð¹ Ð¿Ð»Ð°Ð½ÑˆÐµÑ‚, Ñ€Ð°Ð·Ð±Ð»Ð¾ÐºÐ¸Ñ€Ð¾Ð²Ð°Ð² ÐµÐ³Ð¾ Ð¾Ñ‚Ð¿ÐµÑ‡Ð°Ñ‚ÐºÐ¾Ð¼ Ð¿Ð°Ð»ÑŒÑ†Ð°.")
     else
-        SendChat("/me достала из кармана служебный планшет, разблокировав его отпечатком пальца.")
+        SendChat("/me Ð´Ð¾ÑÑ‚Ð°Ð»Ð° Ð¸Ð· ÐºÐ°Ñ€Ð¼Ð°Ð½Ð° ÑÐ»ÑƒÐ¶ÐµÐ±Ð½Ñ‹Ð¹ Ð¿Ð»Ð°Ð½ÑˆÐµÑ‚, Ñ€Ð°Ð·Ð±Ð»Ð¾ÐºÐ¸Ñ€Ð¾Ð²Ð°Ð² ÐµÐ³Ð¾ Ð¾Ñ‚Ð¿ÐµÑ‡Ð°Ñ‚ÐºÐ¾Ð¼ Ð¿Ð°Ð»ÑŒÑ†Ð°.")
     Sleep 2070
     if (Gender == 1)
-        SendChat("/me зашёл в электронную базу данных жителей штата и нашёл данные о клиенте")
+        SendChat("/me Ð·Ð°ÑˆÑ‘Ð» Ð² ÑÐ»ÐµÐºÑ‚Ñ€Ð¾Ð½Ð½ÑƒÑŽ Ð±Ð°Ð·Ñƒ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð¶Ð¸Ñ‚ÐµÐ»ÐµÐ¹ ÑˆÑ‚Ð°Ñ‚Ð° Ð¸ Ð½Ð°ÑˆÑ‘Ð» Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¾ ÐºÐ»Ð¸ÐµÐ½Ñ‚Ðµ")
     else
-        SendChat("/me зашла в электронную базу данных жителей штата и нашла данные о клиенте")
+        SendChat("/me Ð·Ð°ÑˆÐ»Ð° Ð² ÑÐ»ÐµÐºÑ‚Ñ€Ð¾Ð½Ð½ÑƒÑŽ Ð±Ð°Ð·Ñƒ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð¶Ð¸Ñ‚ÐµÐ»ÐµÐ¹ ÑˆÑ‚Ð°Ñ‚Ð° Ð¸ Ð½Ð°ÑˆÐ»Ð° Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¾ ÐºÐ»Ð¸ÐµÐ½Ñ‚Ðµ")
     Sleep 2070
     if (Gender == 1)
-        SendChat("/me открыл в новой вкладке базу данных Департамента лицензирования")
+        SendChat("/me Ð¾Ñ‚ÐºÑ€Ñ‹Ð» Ð² Ð½Ð¾Ð²Ð¾Ð¹ Ð²ÐºÐ»Ð°Ð´ÐºÐµ Ð±Ð°Ð·Ñƒ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð”ÐµÐ¿Ð°Ñ€Ñ‚Ð°Ð¼ÐµÐ½Ñ‚Ð° Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ")
     else
-        SendChat("/me открыла в новой вкладке базу данных Департамента лицензирования")
+        SendChat("/me Ð¾Ñ‚ÐºÑ€Ñ‹Ð»Ð° Ð² Ð½Ð¾Ð²Ð¾Ð¹ Ð²ÐºÐ»Ð°Ð´ÐºÐµ Ð±Ð°Ð·Ñƒ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð”ÐµÐ¿Ð°Ñ€Ñ‚Ð°Ð¼ÐµÐ½Ñ‚Ð° Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ")
     Sleep 2070
     if (Gender == 1)
-        SendChat("/me выбрал нужные лицензии и скопировал данные клиента из общей базы в базу ДЛ")
+        SendChat("/me Ð²Ñ‹Ð±Ñ€Ð°Ð» Ð½ÑƒÐ¶Ð½Ñ‹Ðµ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¸ Ð¸ ÑÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ð» Ð´Ð°Ð½Ð½Ñ‹Ðµ ÐºÐ»Ð¸ÐµÐ½Ñ‚Ð° Ð¸Ð· Ð¾Ð±Ñ‰ÐµÐ¹ Ð±Ð°Ð·Ñ‹ Ð² Ð±Ð°Ð·Ñƒ Ð”Ð›")
     else
-        SendChat("/me выбрала нужные лицензии и скопировала данные клиента из общей базы в базу ДЛ")
+        SendChat("/me Ð²Ñ‹Ð±Ñ€Ð°Ð»Ð° Ð½ÑƒÐ¶Ð½Ñ‹Ðµ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¸ Ð¸ ÑÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ð»Ð° Ð´Ð°Ð½Ð½Ñ‹Ðµ ÐºÐ»Ð¸ÐµÐ½Ñ‚Ð° Ð¸Ð· Ð¾Ð±Ñ‰ÐµÐ¹ Ð±Ð°Ð·Ñ‹ Ð² Ð±Ð°Ð·Ñƒ Ð”Ð›")
     Sleep 2070
     if (Gender == 1)
-        SendChat("/me сформировал электронный бланк оплаты, внеся сумму оплаты и дату выдачи лицензий")
+        SendChat("/me ÑÑ„Ð¾Ñ€Ð¼Ð¸Ñ€Ð¾Ð²Ð°Ð» ÑÐ»ÐµÐºÑ‚Ñ€Ð¾Ð½Ð½Ñ‹Ð¹ Ð±Ð»Ð°Ð½Ðº Ð¾Ð¿Ð»Ð°Ñ‚Ñ‹, Ð²Ð½ÐµÑÑ ÑÑƒÐ¼Ð¼Ñƒ Ð¾Ð¿Ð»Ð°Ñ‚Ñ‹ Ð¸ Ð´Ð°Ñ‚Ñƒ Ð²Ñ‹Ð´Ð°Ñ‡Ð¸ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¹")
     else
-        SendChat("/me сформировала электронный бланк оплаты, внеся сумму оплаты и дату выдачи лицензий")
+        SendChat("/me ÑÑ„Ð¾Ñ€Ð¼Ð¸Ñ€Ð¾Ð²Ð°Ð»Ð° ÑÐ»ÐµÐºÑ‚Ñ€Ð¾Ð½Ð½Ñ‹Ð¹ Ð±Ð»Ð°Ð½Ðº Ð¾Ð¿Ð»Ð°Ñ‚Ñ‹, Ð²Ð½ÐµÑÑ ÑÑƒÐ¼Ð¼Ñƒ Ð¾Ð¿Ð»Ð°Ñ‚Ñ‹ Ð¸ Ð´Ð°Ñ‚Ñƒ Ð²Ñ‹Ð´Ð°Ñ‡Ð¸ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¹")
     Sleep 2070
-    SendChat("/todo Нужна идентификация личности через Face ID*наводя объектив на клиента")
+    SendChat("/todo ÐÑƒÐ¶Ð½Ð° Ð¸Ð´ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ†Ð¸Ñ Ð»Ð¸Ñ‡Ð½Ð¾ÑÑ‚Ð¸ Ñ‡ÐµÑ€ÐµÐ· Face ID*Ð½Ð°Ð²Ð¾Ð´Ñ Ð¾Ð±ÑŠÐµÐºÑ‚Ð¸Ð² Ð½Ð° ÐºÐ»Ð¸ÐµÐ½Ñ‚Ð°")
     Sleep 2070
-    SendChat("/todo Посмотрите, пожалуйста, прямо в камеру*сделав снимок лица клиента")
+    SendChat("/todo ÐŸÐ¾ÑÐ¼Ð¾Ñ‚Ñ€Ð¸Ñ‚Ðµ, Ð¿Ð¾Ð¶Ð°Ð»ÑƒÐ¹ÑÑ‚Ð°, Ð¿Ñ€ÑÐ¼Ð¾ Ð² ÐºÐ°Ð¼ÐµÑ€Ñƒ*ÑÐ´ÐµÐ»Ð°Ð² ÑÐ½Ð¸Ð¼Ð¾Ðº Ð»Ð¸Ñ†Ð° ÐºÐ»Ð¸ÐµÐ½Ñ‚Ð°")
     Sleep 2070
-    SendChat("/todo Поставьте электронную подпись*передавая планшет человеку напротив")
+    SendChat("/todo ÐŸÐ¾ÑÑ‚Ð°Ð²ÑŒÑ‚Ðµ ÑÐ»ÐµÐºÑ‚Ñ€Ð¾Ð½Ð½ÑƒÑŽ Ð¿Ð¾Ð´Ð¿Ð¸ÑÑŒ*Ð¿ÐµÑ€ÐµÐ´Ð°Ð²Ð°Ñ Ð¿Ð»Ð°Ð½ÑˆÐµÑ‚ Ñ‡ÐµÐ»Ð¾Ð²ÐµÐºÑƒ Ð½Ð°Ð¿Ñ€Ð¾Ñ‚Ð¸Ð²")
     Sleep 2080
-    SendChat("*/me взял планшет и поставил электронную подпись")
+    SendChat("*/me Ð²Ð·ÑÐ» Ð¿Ð»Ð°Ð½ÑˆÐµÑ‚ Ð¸ Ð¿Ð¾ÑÑ‚Ð°Ð²Ð¸Ð» ÑÐ»ÐµÐºÑ‚Ñ€Ð¾Ð½Ð½ÑƒÑŽ Ð¿Ð¾Ð´Ð¿Ð¸ÑÑŒ")
     Sleep 500
     SendChat("/time")
     Sleep 50
-    addChatMessage("{FF0000}[" Tag "] {00FF00} После получения подписи: {FFFF00}Backspace{00FF00} - далее, {FF4500}Delete{00FF00} - отмена.")
+    addChatMessage("{FF0000}[" Tag "] {00FF00} ÐŸÐ¾ÑÐ»Ðµ Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ñ Ð¿Ð¾Ð´Ð¿Ð¸ÑÐ¸: {FFFF00}Backspace{00FF00} - Ð´Ð°Ð»ÐµÐµ, {FF4500}Delete{00FF00} - Ð¾Ñ‚Ð¼ÐµÐ½Ð°.")
     LicenseProcess := 2
 return
 
 ; ====================================================================================================
-; ИСТОРИЯ ПРИЗОВ
+; Ð˜Ð¡Ð¢ÐžÐ Ð˜Ð¯ ÐŸÐ Ð˜Ð—ÐžÐ’
 ; ====================================================================================================
 LoadPrizeHistory() {
     global PrizeHistory, BindIni
@@ -551,9 +551,9 @@ AddPrizeToHistory(prizeText) {
         PrizeHistory.RemoveAt(1)
     SavePrizeHistory()
     if (HistoryGuiHwnd && WinExist("ahk_id " HistoryGuiHwnd))
-        RefreshHistoryListFunc()   ; исправлено: вызов функции вместо Gosub
+        RefreshHistoryListFunc()   ; Ð¸ÑÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¾: Ð²Ñ‹Ð·Ð¾Ð² Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸ Ð²Ð¼ÐµÑÑ‚Ð¾ Gosub
 }
-RefreshHistoryListFunc() {         ; новая функция для обновления списка
+RefreshHistoryListFunc() {         ; Ð½Ð¾Ð²Ð°Ñ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ñ Ð´Ð»Ñ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ ÑÐ¿Ð¸ÑÐºÐ°
     global PrizeHistory
     Gui, HistoryGui:Default
     LV_Delete()
@@ -562,7 +562,7 @@ RefreshHistoryListFunc() {         ; новая функция для обнов
 }
 
 ; ====================================================================================================
-; АВТОТАЙМ
+; ÐÐ’Ð¢ÐžÐ¢ÐÐ™Ðœ
 ; ====================================================================================================
 StartAutoTime() {
     global AutoTimeTimerHandle, AutoTimeActive
@@ -588,7 +588,7 @@ StopAutoTime() {
 }
 
 ; ====================================================================================================
-; АВТОРУЛЕТКА
+; ÐÐ’Ð¢ÐžÐ Ð£Ð›Ð•Ð¢ÐšÐ
 ; ====================================================================================================
 StartRouletteSequence() {
     global RouletteAwaitingPrize, GameWasMinimized, RouletteProcessing
@@ -602,7 +602,7 @@ StartRouletteSequence() {
     } else {
         GameWasMinimized := 0
     }
-    SendChat("/рулетка")
+    SendChat("/Ñ€ÑƒÐ»ÐµÑ‚ÐºÐ°")
     Sleep, 500
     SendInput, {Enter}
     if (GameWasMinimized)
@@ -617,16 +617,16 @@ ResetRouletteState:
 return
 
 ; ====================================================================================================
-; ПАРСИНГ СМС
+; ÐŸÐÐ Ð¡Ð˜ÐÐ“ Ð¡ÐœÐ¡
 ; ====================================================================================================
 ParseSmsMessage(line) {
-    if !RegExMatch(line, "i)СМС\s+от\s+(.+?)\s*\[(\d+)\]:\s*(.*)$", match)
+    if !RegExMatch(line, "i)Ð¡ÐœÐ¡\s+Ð¾Ñ‚\s+(.+?)\s*\[(\d+)\]:\s*(.*)$", match)
         return ["", "", ""]
     return [Trim(match1), Trim(match2), Trim(match3)]
 }
 
 ; ====================================================================================================
-; ФУНКЦИЯ УВЕДОМЛЕНИЯ (исправлена: не показывать при активной игре)
+; Ð¤Ð£ÐÐšÐ¦Ð˜Ð¯ Ð£Ð’Ð•Ð”ÐžÐœÐ›Ð•ÐÐ˜Ð¯ (Ð¸ÑÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð°: Ð½Ðµ Ð¿Ð¾ÐºÐ°Ð·Ñ‹Ð²Ð°Ñ‚ÑŒ Ð¿Ñ€Ð¸ Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¾Ð¹ Ð¸Ð³Ñ€Ðµ)
 ; ====================================================================================================
 ShowClickableNotification(senderName, senderNumber, msgText) {
     if WinActive("ahk_exe gta_sa.exe")
@@ -641,11 +641,11 @@ ShowClickableNotification(senderName, senderNumber, msgText) {
     NotificationGuiHwnd := WinExist()
     Gui, Notification:Color, 2D2D2D
     Gui, Notification:Font, s10 Bold, Segoe UI
-    Gui, Notification:Add, Text, x10 y5 cFFD700, ✉ Новое СМС от %senderName%
+    Gui, Notification:Add, Text, x10 y5 cFFD700, âœ‰ ÐÐ¾Ð²Ð¾Ðµ Ð¡ÐœÐ¡ Ð¾Ñ‚ %senderName%
     Gui, Notification:Font, s9 cWhite, Segoe UI
     Gui, Notification:Add, Text, x10 y30, %msgText%
-    Gui, Notification:Add, Button, gOpenReplyFromNotification x10 y55 w80 h25, 💬 Ответить
-    Gui, Notification:Add, Button, gCloseNotification x95 y55 w80 h25, ❌ Закрыть
+    Gui, Notification:Add, Button, gOpenReplyFromNotification x10 y55 w80 h25, ðŸ’¬ ÐžÑ‚Ð²ÐµÑ‚Ð¸Ñ‚ÑŒ
+    Gui, Notification:Add, Button, gCloseNotification x95 y55 w80 h25, âŒ Ð—Ð°ÐºÑ€Ñ‹Ñ‚ÑŒ
     SysGet, workArea, MonitorWorkArea
     winWidth := 200
     winHeight := 100
@@ -657,14 +657,14 @@ ShowClickableNotification(senderName, senderNumber, msgText) {
 }
 
 ; ====================================================================================================
-; МОНИТОРИНГ ЧАТА (исправлен: фильтр Admin 5055 + удалено дублирование функции)
+; ÐœÐžÐÐ˜Ð¢ÐžÐ Ð˜ÐÐ“ Ð§ÐÐ¢Ð (Ð¸ÑÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½: Ñ„Ð¸Ð»ÑŒÑ‚Ñ€ Admin 5055 + ÑƒÐ´Ð°Ð»ÐµÐ½Ð¾ Ð´ÑƒÐ±Ð»Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸)
 ; ====================================================================================================
 MonitorChat:
     if (!IsFunc("GetChatLine")) {
         global _warnedChat
         if (!_warnedChat) {
             _warnedChat := 1
-            addChatMessage("{FF0000}[МЭРИЯ] Функция GetChatLine не найдена.")
+            addChatMessage("{FF0000}[ÐœÐ­Ð Ð˜Ð¯] Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ GetChatLine Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½Ð°.")
         }
         return
     }
@@ -674,14 +674,14 @@ MonitorChat:
     cleanMsg := RegExReplace(msg, "\{[a-fA-F0-9]{6}\}", "")
     cleanMsg := Trim(cleanMsg)
 
-    ; РУЛЕТКА
+    ; Ð Ð£Ð›Ð•Ð¢ÐšÐ
     global RouletteProcessing, AutoRouletteActive, RouletteAwaitingPrize
-    if (AutoRouletteActive && InStr(cleanMsg, "Рулетка готова") && !RouletteProcessing) {
+    if (AutoRouletteActive && InStr(cleanMsg, "Ð ÑƒÐ»ÐµÑ‚ÐºÐ° Ð³Ð¾Ñ‚Ð¾Ð²Ð°") && !RouletteProcessing) {
         RouletteProcessing := 1
         SetTimer, StartRouletteSequence, -10
     }
-    if (RouletteAwaitingPrize && InStr(cleanMsg, "Приз:")) {
-        prizeStart := InStr(cleanMsg, "Приз:") + 5
+    if (RouletteAwaitingPrize && InStr(cleanMsg, "ÐŸÑ€Ð¸Ð·:")) {
+        prizeStart := InStr(cleanMsg, "ÐŸÑ€Ð¸Ð·:") + 5
         prizeText := Trim(SubStr(cleanMsg, prizeStart))
         if (prizeText != "") {
             AddPrizeToHistory(prizeText)
@@ -691,8 +691,8 @@ MonitorChat:
         RouletteProcessing := 0
     }
 
-    ; ОБРАБОТКА СМС (с фильтром Admin 5055)
-    if InStr(cleanMsg, "СМС") {
+    ; ÐžÐ‘Ð ÐÐ‘ÐžÐ¢ÐšÐ Ð¡ÐœÐ¡ (Ñ Ñ„Ð¸Ð»ÑŒÑ‚Ñ€Ð¾Ð¼ Admin 5055)
+    if InStr(cleanMsg, "Ð¡ÐœÐ¡") {
         global LastSmsTime, LastSmsMessage
         if (cleanMsg = LastSmsMessage)
             return
@@ -703,7 +703,7 @@ MonitorChat:
         number := result[2]
         text := result[3]
 
-        ; Игнорируем уведомления и историю для СМС от Admin 5055
+        ; Ð˜Ð³Ð½Ð¾Ñ€Ð¸Ñ€ÑƒÐµÐ¼ ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ñ Ð¸ Ð¸ÑÑ‚Ð¾Ñ€Ð¸ÑŽ Ð´Ð»Ñ Ð¡ÐœÐ¡ Ð¾Ñ‚ Admin 5055
         isAdmin5055 := (number = "5055" && InStr(sender, "Admin"))
         if (!isAdmin5055 && sender != "" && text != "") {
             LastSmsTime := A_TickCount
@@ -711,16 +711,16 @@ MonitorChat:
             AddSmsRecord("in", number, sender, text)
             ShowClickableNotification(sender, number, text)
         }
-        ; Если это сообщение от 5055, оно не сохраняется и не показывает уведомление,
-        ; но выполнение скрипта продолжается – нижестоящие проверки (например, ответ админа для адвоката) сработают.
+        ; Ð•ÑÐ»Ð¸ ÑÑ‚Ð¾ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ Ð¾Ñ‚ 5055, Ð¾Ð½Ð¾ Ð½Ðµ ÑÐ¾Ñ…Ñ€Ð°Ð½ÑÐµÑ‚ÑÑ Ð¸ Ð½Ðµ Ð¿Ð¾ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÑ‚ ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ðµ,
+        ; Ð½Ð¾ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ ÑÐºÑ€Ð¸Ð¿Ñ‚Ð° Ð¿Ñ€Ð¾Ð´Ð¾Ð»Ð¶Ð°ÐµÑ‚ÑÑ â€“ Ð½Ð¸Ð¶ÐµÑÑ‚Ð¾ÑÑ‰Ð¸Ðµ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ¸ (Ð½Ð°Ð¿Ñ€Ð¸Ð¼ÐµÑ€, Ð¾Ñ‚Ð²ÐµÑ‚ Ð°Ð´Ð¼Ð¸Ð½Ð° Ð´Ð»Ñ Ð°Ð´Ð²Ð¾ÐºÐ°Ñ‚Ð°) ÑÑ€Ð°Ð±Ð¾Ñ‚Ð°ÑŽÑ‚.
     }
 
-; Проверка предъявления паспорта (для лицензий) - с поиском по последним 4 строкам
+; ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð¿Ñ€ÐµÐ´ÑŠÑÐ²Ð»ÐµÐ½Ð¸Ñ Ð¿Ð°ÑÐ¿Ð¾Ñ€Ñ‚Ð° (Ð´Ð»Ñ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¹) - Ñ Ð¿Ð¾Ð¸ÑÐºÐ¾Ð¼ Ð¿Ð¾ Ð¿Ð¾ÑÐ»ÐµÐ´Ð½Ð¸Ð¼ 4 ÑÑ‚Ñ€Ð¾ÐºÐ°Ð¼
 if (LicenseProcess == 1) {
     nameWithSpaces := TargetName
     nameWithUnderscores := StrReplace(TargetName, " ", "_")
     found := false
-    ; Проверяем строки: текущую, -1, -2, -3
+    ; ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ ÑÑ‚Ñ€Ð¾ÐºÐ¸: Ñ‚ÐµÐºÑƒÑ‰ÑƒÑŽ, -1, -2, -3
     Loop, 4 {
         idx := A_Index - 1   ; 0, -1, -2, -3
         if (idx = 0)
@@ -729,8 +729,8 @@ if (LicenseProcess == 1) {
             GetChatLine(idx, checkMsg)
         if (checkMsg = "")
             continue
-        if (RegExMatch(checkMsg, "i)" nameWithSpaces " показал[а]? паспорт")
-            || RegExMatch(checkMsg, "i)" nameWithUnderscores " показал[а]? паспорт")) {
+        if (RegExMatch(checkMsg, "i)" nameWithSpaces " Ð¿Ð¾ÐºÐ°Ð·Ð°Ð»[Ð°]? Ð¿Ð°ÑÐ¿Ð¾Ñ€Ñ‚")
+            || RegExMatch(checkMsg, "i)" nameWithUnderscores " Ð¿Ð¾ÐºÐ°Ð·Ð°Ð»[Ð°]? Ð¿Ð°ÑÐ¿Ð¾Ñ€Ñ‚")) {
             found := true
             break
         }
@@ -738,59 +738,59 @@ if (LicenseProcess == 1) {
     if (found) {
         LicenseProcess := 0
         SetTimer, StartLicenseRP, -500
-        addChatMessage("{00FF00}[" Tag "]{00FF00} Паспорт получен, запускаю оформление лицензий.")
+        addChatMessage("{00FF00}[" Tag "]{00FF00} ÐŸÐ°ÑÐ¿Ð¾Ñ€Ñ‚ Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½, Ð·Ð°Ð¿ÑƒÑÐºÐ°ÑŽ Ð¾Ñ„Ð¾Ñ€Ð¼Ð»ÐµÐ½Ð¸Ðµ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¹.")
     }
 }
 
-    ; Проверка подписи (для лицензий)
+    ; ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð¿Ð¾Ð´Ð¿Ð¸ÑÐ¸ (Ð´Ð»Ñ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¹)
     if (LicenseProcess == 2) {
-        if (RegExMatch(cleanMsg, "i)" TargetName ".*? взял[а]? планшет и поставил[а]? электронную подпись")) {
-            addChatMessage("{FF0000}[" Tag "] {00FF00}Подпись получена! {FFFFFF}Нажмите {FFFF00}Backspace{FFFFFF} для продолжения.")
+        if (RegExMatch(cleanMsg, "i)" TargetName ".*? Ð²Ð·ÑÐ»[Ð°]? Ð¿Ð»Ð°Ð½ÑˆÐµÑ‚ Ð¸ Ð¿Ð¾ÑÑ‚Ð°Ð²Ð¸Ð»[Ð°]? ÑÐ»ÐµÐºÑ‚Ñ€Ð¾Ð½Ð½ÑƒÑŽ Ð¿Ð¾Ð´Ð¿Ð¸ÑÑŒ")) {
+            addChatMessage("{FF0000}[" Tag "] {00FF00}ÐŸÐ¾Ð´Ð¿Ð¸ÑÑŒ Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½Ð°! {FFFFFF}ÐÐ°Ð¶Ð¼Ð¸Ñ‚Ðµ {FFFF00}Backspace{FFFFFF} Ð´Ð»Ñ Ð¿Ñ€Ð¾Ð´Ð¾Ð»Ð¶ÐµÐ½Ð¸Ñ.")
         }
     }
 
-; Проверка оплаты для адвоката (любая сумма)
+; ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð¾Ð¿Ð»Ð°Ñ‚Ñ‹ Ð´Ð»Ñ Ð°Ð´Ð²Ð¾ÐºÐ°Ñ‚Ð° (Ð»ÑŽÐ±Ð°Ñ ÑÑƒÐ¼Ð¼Ð°)
 if (WaitingForPayment) {
-    if (RegExMatch(cleanMsg, "i)Тебе передано \$([\d\s]+) от (.*)", Match)) {
+    if (RegExMatch(cleanMsg, "i)Ð¢ÐµÐ±Ðµ Ð¿ÐµÑ€ÐµÐ´Ð°Ð½Ð¾ \$([\d\s]+) Ð¾Ñ‚ (.*)", Match)) {
         sumRaw := Match1
-        sumClean := RegExReplace(sumRaw, "\s", "")   ; убираем пробелы (50 000 -> 50000)
+        sumClean := RegExReplace(sumRaw, "\s", "")   ; ÑƒÐ±Ð¸Ñ€Ð°ÐµÐ¼ Ð¿Ñ€Ð¾Ð±ÐµÐ»Ñ‹ (50 000 -> 50000)
         Payer := StrReplace(Match2, "_", " ")
-        SendChat("Хорошо " Payer ", оплату в размере " sumRaw "$ вижу. Начинаю рассмотрение дела.")
+        SendChat("Ð¥Ð¾Ñ€Ð¾ÑˆÐ¾ " Payer ", Ð¾Ð¿Ð»Ð°Ñ‚Ñƒ Ð² Ñ€Ð°Ð·Ð¼ÐµÑ€Ðµ " sumRaw "$ Ð²Ð¸Ð¶Ñƒ. ÐÐ°Ñ‡Ð¸Ð½Ð°ÑŽ Ñ€Ð°ÑÑÐ¼Ð¾Ñ‚Ñ€ÐµÐ½Ð¸Ðµ Ð´ÐµÐ»Ð°.")
         WaitingForPayment := false
     }
 }
 
-    ; Проверка ответа от админа (5055)
+    ; ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð¾Ñ‚Ð²ÐµÑ‚Ð° Ð¾Ñ‚ Ð°Ð´Ð¼Ð¸Ð½Ð° (5055)
     if (SmsSent) {
-        if (RegExMatch(cleanMsg, "i)СМС от Admin \[5055\].*?" PendingAcc "/" PendingCaseID ".*?отказ")) {
+        if (RegExMatch(cleanMsg, "i)Ð¡ÐœÐ¡ Ð¾Ñ‚ Admin \[5055\].*?" PendingAcc "/" PendingCaseID ".*?Ð¾Ñ‚ÐºÐ°Ð·")) {
             SmsSent := false
             LawyerResult := 2
             Sleep 1500
             if (Gender == 1)
-    SendChat("/me закрыл дело и выключил компьютер")
+    SendChat("/me Ð·Ð°ÐºÑ€Ñ‹Ð» Ð´ÐµÐ»Ð¾ Ð¸ Ð²Ñ‹ÐºÐ»ÑŽÑ‡Ð¸Ð» ÐºÐ¾Ð¼Ð¿ÑŒÑŽÑ‚ÐµÑ€")
 else
-    SendChat("/me закрыла дело и выключила компьютер")
+    SendChat("/me Ð·Ð°ÐºÑ€Ñ‹Ð»Ð° Ð´ÐµÐ»Ð¾ Ð¸ Ð²Ñ‹ÐºÐ»ÑŽÑ‡Ð¸Ð»Ð° ÐºÐ¾Ð¼Ð¿ÑŒÑŽÑ‚ÐµÑ€")
  Sleep 50
             SendChat("/time")
-            addChatMessage("{FF0000}[" Tag "] {FFFFFF}Нажмите {FF0000}Backspace{FFFFFF} чтобы сообщить итог дела №{FF0000}" PendingAcc " {FFFFFF}или {FF0000}Delete {FFFFFF}для отмены")
+            addChatMessage("{FF0000}[" Tag "] {FFFFFF}ÐÐ°Ð¶Ð¼Ð¸Ñ‚Ðµ {FF0000}Backspace{FFFFFF} Ñ‡Ñ‚Ð¾Ð±Ñ‹ ÑÐ¾Ð¾Ð±Ñ‰Ð¸Ñ‚ÑŒ Ð¸Ñ‚Ð¾Ð³ Ð´ÐµÐ»Ð° â„–{FF0000}" PendingAcc " {FFFFFF}Ð¸Ð»Ð¸ {FF0000}Delete {FFFFFF}Ð´Ð»Ñ Ð¾Ñ‚Ð¼ÐµÐ½Ñ‹")
         }
-        else if (RegExMatch(cleanMsg, "i)СМС от Admin \[5055\].*?" PendingAcc "/" PendingCaseID ".*?оправдан")) {
+        else if (RegExMatch(cleanMsg, "i)Ð¡ÐœÐ¡ Ð¾Ñ‚ Admin \[5055\].*?" PendingAcc "/" PendingCaseID ".*?Ð¾Ð¿Ñ€Ð°Ð²Ð´Ð°Ð½")) {
             SmsSent := false
             LawyerResult := 1
             Sleep 1500
                        if (Gender == 1)
-    SendChat("/me закрыл дело и выключил компьютер")
+    SendChat("/me Ð·Ð°ÐºÑ€Ñ‹Ð» Ð´ÐµÐ»Ð¾ Ð¸ Ð²Ñ‹ÐºÐ»ÑŽÑ‡Ð¸Ð» ÐºÐ¾Ð¼Ð¿ÑŒÑŽÑ‚ÐµÑ€")
 else
-    SendChat("/me закрыла дело и выключила компьютер")
+    SendChat("/me Ð·Ð°ÐºÑ€Ñ‹Ð»Ð° Ð´ÐµÐ»Ð¾ Ð¸ Ð²Ñ‹ÐºÐ»ÑŽÑ‡Ð¸Ð»Ð° ÐºÐ¾Ð¼Ð¿ÑŒÑŽÑ‚ÐµÑ€")
             Sleep 50
             SendChat("/time")
-            addChatMessage("{FF0000}[" Tag "] {FFFFFF}Нажмите {FF0000}Backspace{FFFFFF} чтобы сообщить итог дела №{FF0000}" PendingAcc " {FFFFFF}или {FF0000}Delete {FFFFFF}для отмены")
+            addChatMessage("{FF0000}[" Tag "] {FFFFFF}ÐÐ°Ð¶Ð¼Ð¸Ñ‚Ðµ {FF0000}Backspace{FFFFFF} Ñ‡Ñ‚Ð¾Ð±Ñ‹ ÑÐ¾Ð¾Ð±Ñ‰Ð¸Ñ‚ÑŒ Ð¸Ñ‚Ð¾Ð³ Ð´ÐµÐ»Ð° â„–{FF0000}" PendingAcc " {FFFFFF}Ð¸Ð»Ð¸ {FF0000}Delete {FFFFFF}Ð´Ð»Ñ Ð¾Ñ‚Ð¼ÐµÐ½Ñ‹")
         }
     }
 return
 
 ; ====================================================================================================
-; АВТОПРОФИЛЬ
+; ÐÐ’Ð¢ÐžÐŸÐ ÐžÐ¤Ð˜Ð›Ð¬
 ; ====================================================================================================
 CheckAutoProfile:
     if (AutoProfileActive = 0)
@@ -839,9 +839,9 @@ CheckAutoProfile:
                 if (line == "")
                     continue
                 CleanLine := RegExReplace(line, "\{[a-fA-F0-9]{6}\}", "")
-                if (RegExMatch(CleanLine, "i)Фамилия:[^\s]*\s+([A-Za-z_\s]+)", M))
+                if (RegExMatch(CleanLine, "i)Ð¤Ð°Ð¼Ð¸Ð»Ð¸Ñ:[^\s]*\s+([A-Za-z_\s]+)", M))
                     AutoProfileName := StrReplace(Trim(M1), "_", " ")
-                if (RegExMatch(CleanLine, "i)Номер аккаунта:.*?[^\d]*(\d+)", M))
+                if (RegExMatch(CleanLine, "i)ÐÐ¾Ð¼ÐµÑ€ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°:.*?[^\d]*(\d+)", M))
                     AutoProfileAccNumber := M1
             }
             SendInput, {Esc}
@@ -858,15 +858,15 @@ CheckAutoProfile:
                 IniWrite, %UserAccNumber%, %BindIni%, Settings, AccNumber
             }
             if (AutoProfileName != "" || AutoProfileAccNumber != "") {
-                addChatMessage("{FF0000}[" Tag "] {FFFFFF}Профиль обновлен:")
+                addChatMessage("{FF0000}[" Tag "] {FFFFFF}ÐŸÑ€Ð¾Ñ„Ð¸Ð»ÑŒ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½:")
                 Sleep, 12
-                addChatMessage("{FF0000}[" Tag "] {FFFFFF}Имя:{FF0000} " UserNick)
+                addChatMessage("{FF0000}[" Tag "] {FFFFFF}Ð˜Ð¼Ñ:{FF0000} " UserNick)
                 Sleep, 12
-                addChatMessage("{FF0000}[" Tag "] {FFFFFF}Номер аккаунта:{FF0000} " UserAccNumber)
+                addChatMessage("{FF0000}[" Tag "] {FFFFFF}ÐÐ¾Ð¼ÐµÑ€ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°:{FF0000} " UserAccNumber)
                 try UpdatePreviewFunc()
                 SoundPlay, *-1
             } else {
-                addChatMessage("{FF0000}[" Tag "] Ошибка: Данные не найдены.")
+                addChatMessage("{FF0000}[" Tag "] ÐžÑˆÐ¸Ð±ÐºÐ°: Ð”Ð°Ð½Ð½Ñ‹Ðµ Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½Ñ‹.")
                 SoundPlay, *-1
             }
             AutoProfileActive := 0
@@ -876,7 +876,7 @@ CheckAutoProfile:
 return
 
 ; ====================================================================================================
-; ОКНО ИСТОРИИ ПРИЗОВ
+; ÐžÐšÐÐž Ð˜Ð¡Ð¢ÐžÐ Ð˜Ð˜ ÐŸÐ Ð˜Ð—ÐžÐ’
 ; ====================================================================================================
 global HistoryGuiHwnd := 0
 ShowPrizeHistory() {
@@ -889,17 +889,17 @@ ShowPrizeHistory() {
 HistoryGuiHwnd := WinExist()
 Gui, HistoryGui:Color, 1A1A1A
 Gui, HistoryGui:Font, s14 Bold, Segoe UI
-Gui, HistoryGui:Add, Text, x25 y15 gDragHistory cFFD700, 🎲 История призов (10 последних)
+Gui, HistoryGui:Add, Text, x25 y15 gDragHistory cFFD700, ðŸŽ² Ð˜ÑÑ‚Ð¾Ñ€Ð¸Ñ Ð¿Ñ€Ð¸Ð·Ð¾Ð² (10 Ð¿Ð¾ÑÐ»ÐµÐ´Ð½Ð¸Ñ…)
 Gui, HistoryGui:Font, s10, Segoe UI
-Gui, HistoryGui:Add, Text, x25 y50 cWhite, ═══════════════════════════════════════════════════════════════════
+Gui, HistoryGui:Add, Text, x25 y50 cWhite, â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 Gui, HistoryGui:Font, s11 Bold, Segoe UI
-Gui, HistoryGui:Add, ListView, vHistoryList x25 y70 w400 h300 cFFD700 Background2D2D2D, Время|Приз
+Gui, HistoryGui:Add, ListView, vHistoryList x25 y70 w400 h300 cFFD700 Background2D2D2D, Ð’Ñ€ÐµÐ¼Ñ|ÐŸÑ€Ð¸Ð·
 LV_ModifyCol(1, 80)
 LV_ModifyCol(2, 300)
 Gui, HistoryGui:Font, s11 Bold cWhite, Segoe UI
-Gui, HistoryGui:Add, Button, gCloseHistory x150 y390 w150 h35, 🔄 Закрыть
+Gui, HistoryGui:Add, Button, gCloseHistory x150 y390 w150 h35, ðŸ”„ Ð—Ð°ÐºÑ€Ñ‹Ñ‚ÑŒ
 RefreshHistoryListFunc()
-Gui, HistoryGui:Show, w450 h450, История призов
+Gui, HistoryGui:Show, w450 h450, Ð˜ÑÑ‚Ð¾Ñ€Ð¸Ñ Ð¿Ñ€Ð¸Ð·Ð¾Ð²
 Gui, Main:+Disabled
 WinActivate, ahk_id %HistoryGuiHwnd%
 }
@@ -913,7 +913,7 @@ DragHistory:
 return
 
 ; ====================================================================================================
-; ФУНКЦИИ ДЛЯ ИСТОРИИ СМС И УВЕДОМЛЕНИЙ
+; Ð¤Ð£ÐÐšÐ¦Ð˜Ð˜ Ð”Ð›Ð¯ Ð˜Ð¡Ð¢ÐžÐ Ð˜Ð˜ Ð¡ÐœÐ¡ Ð˜ Ð£Ð’Ð•Ð”ÐžÐœÐ›Ð•ÐÐ˜Ð™
 ; ====================================================================================================
 LoadSmsHistory() {
     global SmsHistory, SmsHistoryFile
@@ -973,17 +973,17 @@ CreateSmsReplyGui(number, name, originalText := "") {
     Gui, SmsReply:New, +AlwaysOnTop +ToolWindow -Caption +LastFound
     Gui, SmsReply:Color, 1A1A1A
     Gui, SmsReply:Font, s12 Bold, Segoe UI
-    Gui, SmsReply:Add, Text, x10 y10 cFFD700, ✉ Ответить %name% [%number%]
+    Gui, SmsReply:Add, Text, x10 y10 cFFD700, âœ‰ ÐžÑ‚Ð²ÐµÑ‚Ð¸Ñ‚ÑŒ %name% [%number%]
     Gui, SmsReply:Font, s10 cWhite, Segoe UI
     if (originalText != "")
-        Gui, SmsReply:Add, Text, x10 y40, Сообщение: %originalText%
+        Gui, SmsReply:Add, Text, x10 y40, Ð¡Ð¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ: %originalText%
     Gui, SmsReply:Font, s11, Segoe UI
     Gui, SmsReply:Add, Edit, vSmsReplyText x10 y70 w280 h60
     GuiControlGet, hEdit, SmsReply:Hwnd, SmsReplyText
     CtlColors.Attach(hEdit, "2D2D2D", "FFD700")
-    Gui, SmsReply:Add, Button, gSendSmsReply x10 y140 w130 h30, 📨 Отправить
-    Gui, SmsReply:Add, Button, gCloseSmsReply x160 y140 w130 h30, ❌ Отмена
-    Gui, SmsReply:Show, w300 h190, Быстрый ответ
+    Gui, SmsReply:Add, Button, gSendSmsReply x10 y140 w130 h30, ðŸ“¨ ÐžÑ‚Ð¿Ñ€Ð°Ð²Ð¸Ñ‚ÑŒ
+    Gui, SmsReply:Add, Button, gCloseSmsReply x160 y140 w130 h30, âŒ ÐžÑ‚Ð¼ÐµÐ½Ð°
+    Gui, SmsReply:Show, w300 h190, Ð‘Ñ‹ÑÑ‚Ñ€Ñ‹Ð¹ Ð¾Ñ‚Ð²ÐµÑ‚
     SetTimer, AutoCloseSmsReply, -30000
 }
 SendSmsReply:
@@ -1009,18 +1009,18 @@ RefreshSmsHistoryList() {
     Loop % SmsHistory.Length() {
         i := SmsHistory.Length() - A_Index + 1
         rec := SmsHistory[i]
-        typeIcon := (rec.type = "in") ? "📩" : "📤"
+        typeIcon := (rec.type = "in") ? "ðŸ“©" : "ðŸ“¤"
         typeName := (rec.type = "in") ? "" : ""
 
-        ; Отображение имени/номера для входящих и исходящих
+        ; ÐžÑ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ Ð¸Ð¼ÐµÐ½Ð¸/Ð½Ð¾Ð¼ÐµÑ€Ð° Ð´Ð»Ñ Ð²Ñ…Ð¾Ð´ÑÑ‰Ð¸Ñ… Ð¸ Ð¸ÑÑ…Ð¾Ð´ÑÑ‰Ð¸Ñ…
         if (rec.type = "out") {
-            ; Для исходящих показываем "→ номер" или "→ имя", если имя есть
+            ; Ð”Ð»Ñ Ð¸ÑÑ…Ð¾Ð´ÑÑ‰Ð¸Ñ… Ð¿Ð¾ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÐ¼ "â†’ Ð½Ð¾Ð¼ÐµÑ€" Ð¸Ð»Ð¸ "â†’ Ð¸Ð¼Ñ", ÐµÑÐ»Ð¸ Ð¸Ð¼Ñ ÐµÑÑ‚ÑŒ
             if (rec.name != "")
-                displayName := "→ " rec.name " [" rec.number "]"
+                displayName := "â†’ " rec.name " [" rec.number "]"
             else
-                displayName := "→ [" rec.number "]"
+                displayName := "â†’ [" rec.number "]"
         } else {
-            ; Входящие: имя [номер]
+            ; Ð’Ñ…Ð¾Ð´ÑÑ‰Ð¸Ðµ: Ð¸Ð¼Ñ [Ð½Ð¾Ð¼ÐµÑ€]
             displayName := (rec.name != "") ? rec.name " [" rec.number "]" : "[" rec.number "]"
         }
 
@@ -1038,19 +1038,19 @@ ShowSmsHistory() {
     SmsHistoryGuiHwnd := WinExist()
     Gui, SmsHistoryGui:Color, 1A1A1A
     Gui, SmsHistoryGui:Font, s14 Bold, Segoe UI
-    Gui, SmsHistoryGui:Add, Text, x25 y15 gDragSmsHistory cFFD700, 📜 История СМС (30 последних)
+    Gui, SmsHistoryGui:Add, Text, x25 y15 gDragSmsHistory cFFD700, ðŸ“œ Ð˜ÑÑ‚Ð¾Ñ€Ð¸Ñ Ð¡ÐœÐ¡ (30 Ð¿Ð¾ÑÐ»ÐµÐ´Ð½Ð¸Ñ…)
     Gui, SmsHistoryGui:Font, s10, Segoe UI
-    Gui, SmsHistoryGui:Add, Text, x25 y50 cWhite, ═══════════════════════════════════════════════════════════════════
+    Gui, SmsHistoryGui:Add, Text, x25 y50 cWhite, â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     Gui, SmsHistoryGui:Font, s11 Bold, Segoe UI
-    Gui, SmsHistoryGui:Add, ListView, vSmsHistoryList x25 y70 w500 h300 cFFD700 Background2D2D2D gSmsHistoryClick, Время|Тип|Номер/Имя|Текст
+    Gui, SmsHistoryGui:Add, ListView, vSmsHistoryList x25 y70 w500 h300 cFFD700 Background2D2D2D gSmsHistoryClick, Ð’Ñ€ÐµÐ¼Ñ|Ð¢Ð¸Ð¿|ÐÐ¾Ð¼ÐµÑ€/Ð˜Ð¼Ñ|Ð¢ÐµÐºÑÑ‚
     LV_ModifyCol(1, 70)
     LV_ModifyCol(2, 60)
     LV_ModifyCol(3, 120)
     LV_ModifyCol(4, 250)
     Gui, SmsHistoryGui:Font, s11 Bold cWhite, Segoe UI
-    Gui, SmsHistoryGui:Add, Button, gCloseSmsHistory x200 y390 w150 h35, 🔄 Закрыть
+    Gui, SmsHistoryGui:Add, Button, gCloseSmsHistory x200 y390 w150 h35, ðŸ”„ Ð—Ð°ÐºÑ€Ñ‹Ñ‚ÑŒ
     RefreshSmsHistoryList()
-    Gui, SmsHistoryGui:Show, w550 h460, История СМС
+    Gui, SmsHistoryGui:Show, w550 h460, Ð˜ÑÑ‚Ð¾Ñ€Ð¸Ñ Ð¡ÐœÐ¡
     WinActivate, ahk_id %SmsHistoryGuiHwnd%
     Gui, Main:+Disabled
     WinActivate, ahk_id %HotkeysGuiHwnd%
@@ -1078,7 +1078,7 @@ SmsHistoryClick:
         if (RowNumber = 0)
             return
         LV_GetText(typeCol, RowNumber, 2)
-        if InStr(typeCol, "📩") {
+        if InStr(typeCol, "ðŸ“©") {
             LV_GetText(numberName, RowNumber, 3)
             if RegExMatch(numberName, "\[(\d+)\]", match)
                 number := match1
@@ -1092,7 +1092,7 @@ SmsHistoryClick:
             _historyReplyNumber := number
             _historyReplyName := name
             _historyReplyText := text
-            Menu, SmsContextMenu, Add, Ответить, ReplyFromHistory
+            Menu, SmsContextMenu, Add, ÐžÑ‚Ð²ÐµÑ‚Ð¸Ñ‚ÑŒ, ReplyFromHistory
             Menu, SmsContextMenu, Show
         }
     }
@@ -1113,7 +1113,7 @@ CloseSmsHistory:
 return
 
 ; ====================================================================================================
-; БИНДЕРЫ
+; Ð‘Ð˜ÐÐ”Ð•Ð Ð«
 ; ====================================================================================================
 LoadBinders() {
     global
@@ -1256,7 +1256,7 @@ BinderHotkey_20:
 return
 
 ; ====================================================================================================
-; ТАЙМЕРЫ
+; Ð¢ÐÐ™ÐœÐ•Ð Ð«
 ; ====================================================================================================
 LoadTimers() {
     global
@@ -1382,16 +1382,16 @@ StopTimerById(timerId) {
 }
 
 ; ====================================================================================================
-; ЗАГРУЗКА КОНФИГА
+; Ð—ÐÐ“Ð Ð£Ð—ÐšÐ ÐšÐžÐÐ¤Ð˜Ð“Ð
 ; ====================================================================================================
 LoadConfigFromFile() {
     global
-    FileSelectFile, configFile, 3, %A_MyDesktop%, Выберите файл конфигурации (*.txt), Text Files (*.txt)
+    FileSelectFile, configFile, 3, %A_MyDesktop%, Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ñ„Ð°Ð¹Ð» ÐºÐ¾Ð½Ñ„Ð¸Ð³ÑƒÑ€Ð°Ñ†Ð¸Ð¸ (*.txt), Text Files (*.txt)
     if (configFile = "")
         return
     FileRead, configContent, %configFile%
     if (ErrorLevel) {
-        MsgBox, 4096, Ошибка, Не удалось прочитать файл!
+        MsgBox, 4096, ÐžÑˆÐ¸Ð±ÐºÐ°, ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¿Ñ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ñ‚ÑŒ Ñ„Ð°Ð¹Ð»!
         return
     }
     Loop, Parse, configContent, `n, `r
@@ -1484,22 +1484,22 @@ else if (RegExMatch(line, "i)^City\s*=\s*(.+)$", match)) {
 }
 
 ; ====================================================================================================
-; ИНТЕРФЕЙС ГЛАВНОГО ОКНА
+; Ð˜ÐÐ¢Ð•Ð Ð¤Ð•Ð™Ð¡ Ð“Ð›ÐÐ’ÐÐžÐ“Ðž ÐžÐšÐÐ
 ; ====================================================================================================
 UpdatePreviewFunc() {
     global
     GuiControlGet, NickEdit, Main:
     GuiControlGet, AccNumberEdit, Main:
     GuiControl, Main:Text, PreviewName, %NickEdit%
-    GuiControl, Main:Text, PreviewAccNumber, % "Номер аккаунта: " . (AccNumberEdit != "" ? AccNumberEdit : "—")
+    GuiControl, Main:Text, PreviewAccNumber, % "ÐÐ¾Ð¼ÐµÑ€ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°: " . (AccNumberEdit != "" ? AccNumberEdit : "â€”")
     if (GenderRadioMale = 1) {
-        GuiControl, Main:Text, PreviewGender, 👨‍💼 Мужчина
-        GuiControl, Main:Text, PreviewRole, 👮 Сотрудник
-        GuiControl, Main:Text, PreviewAvatar, 👨‍💼
+        GuiControl, Main:Text, PreviewGender, ðŸ‘¨â€ðŸ’¼ ÐœÑƒÐ¶Ñ‡Ð¸Ð½Ð°
+        GuiControl, Main:Text, PreviewRole, ðŸ‘® Ð¡Ð¾Ñ‚Ñ€ÑƒÐ´Ð½Ð¸Ðº
+        GuiControl, Main:Text, PreviewAvatar, ðŸ‘¨â€ðŸ’¼
     } else {
-        GuiControl, Main:Text, PreviewGender, 👩‍💼 Женщина
-        GuiControl, Main:Text, PreviewRole, 👮‍♀️ Сотрудница
-        GuiControl, Main:Text, PreviewAvatar, 👩‍💼
+        GuiControl, Main:Text, PreviewGender, ðŸ‘©â€ðŸ’¼ Ð–ÐµÐ½Ñ‰Ð¸Ð½Ð°
+        GuiControl, Main:Text, PreviewRole, ðŸ‘®â€â™€ï¸ Ð¡Ð¾Ñ‚Ñ€ÑƒÐ´Ð½Ð¸Ñ†Ð°
+        GuiControl, Main:Text, PreviewAvatar, ðŸ‘©â€ðŸ’¼
     }
 }
 ApplyThemeFunc() {
@@ -1529,22 +1529,22 @@ UpdateStatusAndTime() {
         if (binder.active && binder.key != "" && binder.text != "")
             activeCount++
 
-    ; Статус: активен только если нет АФК и есть активные биндеры
+    ; Ð¡Ñ‚Ð°Ñ‚ÑƒÑ: Ð°ÐºÑ‚Ð¸Ð²ÐµÐ½ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ ÐµÑÐ»Ð¸ Ð½ÐµÑ‚ ÐÐ¤Ðš Ð¸ ÐµÑÑ‚ÑŒ Ð°ÐºÑ‚Ð¸Ð²Ð½Ñ‹Ðµ Ð±Ð¸Ð½Ð´ÐµÑ€Ñ‹
     isReallyActive := (UserIsActive && activeCount > 0)
     if (isReallyActive)
-        statusColor := "🟢", statusText := "Активен"
+        statusColor := "ðŸŸ¢", statusText := "ÐÐºÑ‚Ð¸Ð²ÐµÐ½"
     else if (!UserIsActive)
-        statusColor := "🔴", statusText := "Неактивен"
+        statusColor := "ðŸ”´", statusText := "ÐÐµÐ°ÐºÑ‚Ð¸Ð²ÐµÐ½"
     else
-        statusColor := "🟡", statusText := "Ожидание"
+        statusColor := "ðŸŸ¡", statusText := "ÐžÐ¶Ð¸Ð´Ð°Ð½Ð¸Ðµ"
 
-    autoRouletteStatus := AutoRouletteActive ? "🎲" : "⚪"
-    autoTimeStatus := AutoTimeActive ? "⏱️" : "⚪"
-    GuiControl, Main:Text, StatusIndicator, %statusColor% %statusText% | 🕐 %mskTime% МСК | Авто: %autoRouletteStatus% %autoTimeStatus%
+    autoRouletteStatus := AutoRouletteActive ? "ðŸŽ²" : "âšª"
+    autoTimeStatus := AutoTimeActive ? "â±ï¸" : "âšª"
+    GuiControl, Main:Text, StatusIndicator, %statusColor% %statusText% | ðŸ• %mskTime% ÐœÐ¡Ðš | ÐÐ²Ñ‚Ð¾: %autoRouletteStatus% %autoTimeStatus%
 }
 
 ; ====================================================================================================
-; АНИМАЦИЯ ОКОН
+; ÐÐÐ˜ÐœÐÐ¦Ð˜Ð¯ ÐžÐšÐžÐ
 ; ====================================================================================================
 AnimateWindowShow(hwnd, steps := 15, delay := 5) {
     if !hwnd
@@ -1573,7 +1573,7 @@ AnimateWindowHide(hwnd, steps := 15, delay := 5) {
 }
 
 ; ====================================================================================================
-; ПОКАЗ ГЛАВНОГО ОКНА (добавлена кнопка "Системные комбинации")
+; ÐŸÐžÐšÐÐ— Ð“Ð›ÐÐ’ÐÐžÐ“Ðž ÐžÐšÐÐ (Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð° ÐºÐ½Ð¾Ð¿ÐºÐ° "Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð½Ñ‹Ðµ ÐºÐ¾Ð¼Ð±Ð¸Ð½Ð°Ñ†Ð¸Ð¸")
 ; ====================================================================================================
 ShowMainGui() {
     global
@@ -1587,45 +1587,45 @@ ShowMainGui() {
     Gui, Main:New, +LastFound -Caption +OwnDialogs
     MainGuiHwnd := WinExist()
     Gui, Main:Font, s22 Bold, Segoe UI
-    Gui, Main:Add, Text, vDragArea x25 y20 gStartDrag cFFD700, ⚜️ МЭРИЯ HELPER
+    Gui, Main:Add, Text, vDragArea x25 y20 gStartDrag cFFD700, âšœï¸ ÐœÐ­Ð Ð˜Ð¯ HELPER
     Gui, Main:Font, s11, Segoe UI
-    Gui, Main:Add, Text, x25 y60 cWhite, ═════════════════════════════════════════════════════════════════════════════
+    Gui, Main:Add, Text, x25 y60 cWhite, â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     Gui, Main:Add, GroupBox, vMainGroup x25 y100 w800 h530 cFFD700
     Gui, Main:Add, GroupBox, vLeftGroup x55 y130 w480 h470 cFFD700
     Gui, Main:Add, GroupBox, vRightGroup x550 y130 w260 h470 cFFD700
     Gui, Main:Font, s11 Bold, Segoe UI
-    Gui, Main:Add, Text, vLbl1 x75 y155 cFFD700, ▸ Игровой никнейм
+    Gui, Main:Add, Text, vLbl1 x75 y155 cFFD700, â–¸ Ð˜Ð³Ñ€Ð¾Ð²Ð¾Ð¹ Ð½Ð¸ÐºÐ½ÐµÐ¹Ð¼
     Gui, Main:Font, s14, Segoe UI
     Gui, Main:Add, Edit, vNickEdit gUpdatePreview x75 y180 w440 h35 Center cFFD700 Background000000, %UserNick%
     Gui, Main:Font, s11 Bold, Segoe UI
-    Gui, Main:Add, Text, vLbl6 x75 y230 cFFD700, ▸ Номер аккаунта
+    Gui, Main:Add, Text, vLbl6 x75 y230 cFFD700, â–¸ ÐÐ¾Ð¼ÐµÑ€ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°
     Gui, Main:Font, s14, Segoe UI
     Gui, Main:Add, Edit, vAccNumberEdit gUpdatePreview x75 y255 w440 h35 Center cFFD700 Background000000, %UserAccNumber%
     Gui, Main:Font, s12 Bold cWhite, Segoe UI
-    Gui, Main:Add, Button, gShowTimerManager x75 y320 w210 h40, ⏰ Таймеры
-    Gui, Main:Add, Button, gShowBinderManager x305 y320 w210 h40, 🔗 Биндеры
+    Gui, Main:Add, Button, gShowTimerManager x75 y320 w210 h40, â° Ð¢Ð°Ð¹Ð¼ÐµÑ€Ñ‹
+    Gui, Main:Add, Button, gShowBinderManager x305 y320 w210 h40, ðŸ”— Ð‘Ð¸Ð½Ð´ÐµÑ€Ñ‹
     Gui, Main:Font, s11 Bold, Segoe UI
-    Gui, Main:Add, Text, vLbl3 x75 y390 cFFD700, ▸ Пол персонажа
+    Gui, Main:Add, Text, vLbl3 x75 y390 cFFD700, â–¸ ÐŸÐ¾Ð» Ð¿ÐµÑ€ÑÐ¾Ð½Ð°Ð¶Ð°
     Gui, Main:Font, s12 Bold cFFD700, Segoe UI
-    Gui, Main:Add, Radio, vGenderRadioMale gGenderChanged x95 y415 w120 h30 Group, 👨‍💼 Мужской
-    Gui, Main:Add, Radio, vGenderRadioFemale gGenderChanged x225 y415 w120 h30, 👩‍💼 Женский
+    Gui, Main:Add, Radio, vGenderRadioMale gGenderChanged x95 y415 w120 h30 Group, ðŸ‘¨â€ðŸ’¼ ÐœÑƒÐ¶ÑÐºÐ¾Ð¹
+    Gui, Main:Add, Radio, vGenderRadioFemale gGenderChanged x225 y415 w120 h30, ðŸ‘©â€ðŸ’¼ Ð–ÐµÐ½ÑÐºÐ¸Ð¹
     if (Gender == 1)
         GuiControl, Main:, GenderRadioMale, 1
     else
         GuiControl, Main:, GenderRadioFemale, 1
 
-       ; ЛЕВАЯ КОЛОНКА: чекбоксы, кнопки истории и выбор города (выпадающий список)
+       ; Ð›Ð•Ð’ÐÐ¯ ÐšÐžÐ›ÐžÐÐšÐ: Ñ‡ÐµÐºÐ±Ð¾ÐºÑÑ‹, ÐºÐ½Ð¾Ð¿ÐºÐ¸ Ð¸ÑÑ‚Ð¾Ñ€Ð¸Ð¸ Ð¸ Ð²Ñ‹Ð±Ð¾Ñ€ Ð³Ð¾Ñ€Ð¾Ð´Ð° (Ð²Ñ‹Ð¿Ð°Ð´Ð°ÑŽÑ‰Ð¸Ð¹ ÑÐ¿Ð¸ÑÐ¾Ðº)
     Gui, Main:Font, s10 Bold, Segoe UI
-    Gui, Main:Add, Checkbox, vAutoRouletteCheck gToggleAutoRoulette x75 y455 w180 h25 cFFD700, 🎲 Авто-рулетка
-    Gui, Main:Add, Checkbox, vAutoTimeCheck gToggleAutoTime x75 y485 w200 h25 cFFD700, ⏱️ Авто-time (45 сек)
+    Gui, Main:Add, Checkbox, vAutoRouletteCheck gToggleAutoRoulette x75 y455 w180 h25 cFFD700, ðŸŽ² ÐÐ²Ñ‚Ð¾-Ñ€ÑƒÐ»ÐµÑ‚ÐºÐ°
+    Gui, Main:Add, Checkbox, vAutoTimeCheck gToggleAutoTime x75 y485 w200 h25 cFFD700, â±ï¸ ÐÐ²Ñ‚Ð¾-time (45 ÑÐµÐº)
 
-    ; Кнопка "История призов"
-    Gui, Main:Add, Button, gShowPrizeHistory x75 y520 w210 h25, 📜 История призов
+    ; ÐšÐ½Ð¾Ð¿ÐºÐ° "Ð˜ÑÑ‚Ð¾Ñ€Ð¸Ñ Ð¿Ñ€Ð¸Ð·Ð¾Ð²"
+    Gui, Main:Add, Button, gShowPrizeHistory x75 y520 w210 h25, ðŸ“œ Ð˜ÑÑ‚Ð¾Ñ€Ð¸Ñ Ð¿Ñ€Ð¸Ð·Ð¾Ð²
 
-        ; Выбор города (выпадающий список, ширина как у кнопки, текст по центру)
+        ; Ð’Ñ‹Ð±Ð¾Ñ€ Ð³Ð¾Ñ€Ð¾Ð´Ð° (Ð²Ñ‹Ð¿Ð°Ð´Ð°ÑŽÑ‰Ð¸Ð¹ ÑÐ¿Ð¸ÑÐ¾Ðº, ÑˆÐ¸Ñ€Ð¸Ð½Ð° ÐºÐ°Ðº Ñƒ ÐºÐ½Ð¾Ð¿ÐºÐ¸, Ñ‚ÐµÐºÑÑ‚ Ð¿Ð¾ Ñ†ÐµÐ½Ñ‚Ñ€Ñƒ)
     Gui, Main:Font, s10 Bold, Segoe UI
-    Gui, Main:Add, Text, x305 y525 cFFD700,   ; пустой текст (можно удалить)
-    Gui, Main:Add, DropDownList, vCityList gCityChanged x300 y520 w210 +Center, 🛎Лас-Вентурас||🛎Сан-Фиерро|🛎Лос-Сантос
+    Gui, Main:Add, Text, x305 y525 cFFD700,   ; Ð¿ÑƒÑÑ‚Ð¾Ð¹ Ñ‚ÐµÐºÑÑ‚ (Ð¼Ð¾Ð¶Ð½Ð¾ ÑƒÐ´Ð°Ð»Ð¸Ñ‚ÑŒ)
+    Gui, Main:Add, DropDownList, vCityList gCityChanged x300 y520 w210 +Center, ðŸ›ŽÐ›Ð°Ñ-Ð’ÐµÐ½Ñ‚ÑƒÑ€Ð°Ñ||ðŸ›ŽÐ¡Ð°Ð½-Ð¤Ð¸ÐµÑ€Ñ€Ð¾|ðŸ›ŽÐ›Ð¾Ñ-Ð¡Ð°Ð½Ñ‚Ð¾Ñ
     GuiControlGet, hCity, Main:Hwnd, CityList
     CtlColors.Attach(hCity, "2D2D2D", "FFD700")
     if (CityCode = "LV")
@@ -1635,40 +1635,40 @@ ShowMainGui() {
     else
         GuiControl, Choose, CityList, 3
 
-    ; Кнопка "История СМС" (остаётся на своём месте)
-    Gui, Main:Add, Button, gShowSmsHistory x75 y550 w210 h25, 📜 История СМС
+    ; ÐšÐ½Ð¾Ð¿ÐºÐ° "Ð˜ÑÑ‚Ð¾Ñ€Ð¸Ñ Ð¡ÐœÐ¡" (Ð¾ÑÑ‚Ð°Ñ‘Ñ‚ÑÑ Ð½Ð° ÑÐ²Ð¾Ñ‘Ð¼ Ð¼ÐµÑÑ‚Ðµ)
+    Gui, Main:Add, Button, gShowSmsHistory x75 y550 w210 h25, ðŸ“œ Ð˜ÑÑ‚Ð¾Ñ€Ð¸Ñ Ð¡ÐœÐ¡
 
-    ; === ПРАВАЯ КОЛОНКА (без города) ===
+    ; === ÐŸÐ ÐÐ’ÐÐ¯ ÐšÐžÐ›ÐžÐÐšÐ (Ð±ÐµÐ· Ð³Ð¾Ñ€Ð¾Ð´Ð°) ===
     Gui, Main:Font, s13 Bold, Segoe UI
-    Gui, Main:Add, Text, vLbl5 x575 y155 cFFD700 Center w210, ⭐ Профиль
+    Gui, Main:Add, Text, vLbl5 x575 y155 cFFD700 Center w210, â­ ÐŸÑ€Ð¾Ñ„Ð¸Ð»ÑŒ
     Gui, Main:Font, s9 cWhite, Segoe UI
-    Gui, Main:Add, Text, x575 y180 cWhite, ─────────────────────────────
+    Gui, Main:Add, Text, x575 y180 cWhite, â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     Gui, Main:Font, s14 Bold cWhite, Segoe UI
     Gui, Main:Add, Text, vPreviewName x570 y210 w220 Center, %UserNick%
     Gui, Main:Font, s10 cFFD700, Segoe UI
-    Gui, Main:Add, Text, vPreviewAccNumber x570 y245 w220 Center, % "Номер аккаунта: " . (UserAccNumber != "" ? UserAccNumber : "—")
+    Gui, Main:Add, Text, vPreviewAccNumber x570 y245 w220 Center, % "ÐÐ¾Ð¼ÐµÑ€ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°: " . (UserAccNumber != "" ? UserAccNumber : "â€”")
     Gui, Main:Font, s11 cFFD700, Segoe UI
     Gui, Main:Add, Text, vPreviewGender x570 y280 w220 Center
     Gui, Main:Add, Text, vPreviewRole x570 y310 w220 Center
     Gui, Main:Font, s10 Bold, Segoe UI
-    Gui, Main:Add, Text, x575 y350 vStatusIndicator w220 Center cFFD700, 🟢 Загрузка...
+    Gui, Main:Add, Text, x575 y350 vStatusIndicator w220 Center cFFD700, ðŸŸ¢ Ð—Ð°Ð³Ñ€ÑƒÐ·ÐºÐ°...
 
-    ; Аватар (остаётся на месте)
+    ; ÐÐ²Ð°Ñ‚Ð°Ñ€ (Ð¾ÑÑ‚Ð°Ñ‘Ñ‚ÑÑ Ð½Ð° Ð¼ÐµÑÑ‚Ðµ)
     Gui, Main:Add, GroupBox, vAvatarGroup x575 y380 w210 h200 cFFD700
     Gui, Main:Font, s85, Segoe UI
-    Gui, Main:Add, Text, vPreviewAvatar x575 y400 w210 h160 Center cFFD700, 👨‍💼
+    Gui, Main:Add, Text, vPreviewAvatar x575 y400 w210 h160 Center cFFD700, ðŸ‘¨â€ðŸ’¼
 
-    ; Нижние кнопки
+    ; ÐÐ¸Ð¶Ð½Ð¸Ðµ ÐºÐ½Ð¾Ð¿ÐºÐ¸
     Gui, Main:Font, s14 Bold cWhite, Segoe UI
-    Gui, Main:Add, Button, gReloadScriptFromGui x720 y25 w35 h35, 🔄
-    Gui, Main:Add, Button, gSupportVK x760 y25 w35 h35, ❓
-    Gui, Main:Add, Button, gExitApp x800 y25 w35 h35, ✕
+    Gui, Main:Add, Button, gReloadScriptFromGui x720 y25 w35 h35, ðŸ”„
+    Gui, Main:Add, Button, gSupportVK x760 y25 w35 h35, â“
+    Gui, Main:Add, Button, gExitApp x800 y25 w35 h35, âœ•
     Gui, Main:Font, s11 Bold cWhite, Segoe UI
-    Gui, Main:Add, Button, gSaveSettings x80 y640 w110 h40, 💾 Сохранить
-    Gui, Main:Add, Button, gLoadConfigFromFile x210 y640 w110 h40, 📁 Загрузить
-    Gui, Main:Add, Button, gCloseSettings x340 y640 w110 h40, 🔄 Свернуть
-    Gui, Main:Add, Button, gShowInstructions x470 y640 w130 h40, 📖 Инструкция
-    Gui, Main:Add, Button, gShowHotkeysInfo x620 y640 w130 h40, ⚙️ Комбинации
+    Gui, Main:Add, Button, gSaveSettings x80 y640 w110 h40, ðŸ’¾ Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ
+    Gui, Main:Add, Button, gLoadConfigFromFile x210 y640 w110 h40, ðŸ“ Ð—Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ
+    Gui, Main:Add, Button, gCloseSettings x340 y640 w110 h40, ðŸ”„ Ð¡Ð²ÐµÑ€Ð½ÑƒÑ‚ÑŒ
+    Gui, Main:Add, Button, gShowInstructions x470 y640 w130 h40, ðŸ“– Ð˜Ð½ÑÑ‚Ñ€ÑƒÐºÑ†Ð¸Ñ
+    Gui, Main:Add, Button, gShowHotkeysInfo x620 y640 w130 h40, âš™ï¸ ÐšÐ¾Ð¼Ð±Ð¸Ð½Ð°Ñ†Ð¸Ð¸
 
     ApplyThemeFunc()
     UpdatePreviewFunc()
@@ -1682,7 +1682,7 @@ ShowMainGui() {
 }
 
 ; ====================================================================================================
-; ОКНО СИСТЕМНЫХ КОМБИНАЦИЙ (ВЫРОВНЕНО ПО ЦЕНТРУ)
+; ÐžÐšÐÐž Ð¡Ð˜Ð¡Ð¢Ð•ÐœÐÐ«Ð¥ ÐšÐžÐœÐ‘Ð˜ÐÐÐ¦Ð˜Ð™ (Ð’Ð«Ð ÐžÐ’ÐÐ•ÐÐž ÐŸÐž Ð¦Ð•ÐÐ¢Ð Ð£)
 ; ====================================================================================================
 ShowHotkeysInfo() {
     global HotkeysGuiHwnd, MainGuiHwnd
@@ -1695,67 +1695,67 @@ ShowHotkeysInfo() {
     HotkeysGuiHwnd := WinExist()
     Gui, HotkeysGui:Color, 1A1A1A
     Gui, HotkeysGui:Font, s16 Bold, Segoe UI
-    Gui, HotkeysGui:Add, Text, x0 y15 w500 Center gDragHotkeys cFFD700, ⌨️ Системные комбинации
+    Gui, HotkeysGui:Add, Text, x0 y15 w500 Center gDragHotkeys cFFD700, âŒ¨ï¸ Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð½Ñ‹Ðµ ÐºÐ¾Ð¼Ð±Ð¸Ð½Ð°Ñ†Ð¸Ð¸
     Gui, HotkeysGui:Font, s10, Segoe UI
-    Gui, HotkeysGui:Add, Text, x25 y50 w450 Center cWhite, ═══════════════════════════════════════════════════════════════════════════
+    Gui, HotkeysGui:Add, Text, x25 y50 w450 Center cWhite, â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-    ; Список команд с разделителями и цветом
+    ; Ð¡Ð¿Ð¸ÑÐ¾Ðº ÐºÐ¾Ð¼Ð°Ð½Ð´ Ñ Ñ€Ð°Ð·Ð´ÐµÐ»Ð¸Ñ‚ÐµÐ»ÑÐ¼Ð¸ Ð¸ Ñ†Ð²ÐµÑ‚Ð¾Ð¼
     Gui, HotkeysGui:Font, s11 cWhite, Segoe UI
     Gui, HotkeysGui:Add, Text, x25 y90 cFF5555,
-    Gui, HotkeysGui:Add, Text, x25 y90 cWhite,  /вып [ID] - выпустить человека с КПЗ
+    Gui, HotkeysGui:Add, Text, x25 y90 cWhite,  /Ð²Ñ‹Ð¿ [ID] - Ð²Ñ‹Ð¿ÑƒÑÑ‚Ð¸Ñ‚ÑŒ Ñ‡ÐµÐ»Ð¾Ð²ÐµÐºÐ° Ñ ÐšÐŸÐ—
     Gui, HotkeysGui:Add, Progress, x25 y108 w450 h1 c888888 Background888888
 
     Gui, HotkeysGui:Add, Text, x25 y120 cFF5555,
-    Gui, HotkeysGui:Add, Text, x25 y120 cWhite,  /лица [ID] - продать лицензию
+    Gui, HotkeysGui:Add, Text, x25 y120 cWhite,  /Ð»Ð¸Ñ†Ð° [ID] - Ð¿Ñ€Ð¾Ð´Ð°Ñ‚ÑŒ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸ÑŽ
     Gui, HotkeysGui:Add, Progress, x25 y138 w450 h1 c888888 Background888888
 
     Gui, HotkeysGui:Add, Text, x25 y150 cFF5555,
-    Gui, HotkeysGui:Add, Text, x25 y150 cWhite,  /инф [ID] - информация о игроке
+    Gui, HotkeysGui:Add, Text, x25 y150 cWhite,  /Ð¸Ð½Ñ„ [ID] - Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ Ð¾ Ð¸Ð³Ñ€Ð¾ÐºÐµ
     Gui, HotkeysGui:Add, Progress, x25 y168 w450 h1 c888888 Background888888
 
     Gui, HotkeysGui:Add, Text, x25 y180 cFF5555,
-    Gui, HotkeysGui:Add, Text, x25 y180 cWhite,  /автопрофиль - автоматическое заполнение профиля
+    Gui, HotkeysGui:Add, Text, x25 y180 cWhite,  /Ð°Ð²Ñ‚Ð¾Ð¿Ñ€Ð¾Ñ„Ð¸Ð»ÑŒ - Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¾Ðµ Ð·Ð°Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ Ð¿Ñ€Ð¾Ñ„Ð¸Ð»Ñ
     Gui, HotkeysGui:Add, Progress, x25 y198 w450 h1 c888888 Background888888
 
     Gui, HotkeysGui:Add, Text, x25 y210 cFFD700,
-    Gui, HotkeysGui:Add, Text, x25 y210 cWhite,  Alt+1 - приветствие сотрудника
+    Gui, HotkeysGui:Add, Text, x25 y210 cWhite,  Alt+1 - Ð¿Ñ€Ð¸Ð²ÐµÑ‚ÑÑ‚Ð²Ð¸Ðµ ÑÐ¾Ñ‚Ñ€ÑƒÐ´Ð½Ð¸ÐºÐ°
     Gui, HotkeysGui:Add, Progress, x25 y228 w450 h1 c888888 Background888888
 
     Gui, HotkeysGui:Add, Text, x25 y240 cFFD700,
-    Gui, HotkeysGui:Add, Text, x25 y240 cWhite,  Alt+2 - список лицензий с ценами
+    Gui, HotkeysGui:Add, Text, x25 y240 cWhite,  Alt+2 - ÑÐ¿Ð¸ÑÐ¾Ðº Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¹ Ñ Ñ†ÐµÐ½Ð°Ð¼Ð¸
     Gui, HotkeysGui:Add, Progress, x25 y258 w450 h1 c888888 Background888888
 
     Gui, HotkeysGui:Add, Text, x25 y270 cFFD700,
-    Gui, HotkeysGui:Add, Text, x25 y270 cWhite,  Alt+3 - цена отдельной лицензии (1-7)
+    Gui, HotkeysGui:Add, Text, x25 y270 cWhite,  Alt+3 - Ñ†ÐµÐ½Ð° Ð¾Ñ‚Ð´ÐµÐ»ÑŒÐ½Ð¾Ð¹ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¸ (1-7)
     Gui, HotkeysGui:Add, Progress, x25 y288 w450 h1 c888888 Background888888
 
     Gui, HotkeysGui:Add, Text, x25 y300 cFFD700,
-    Gui, HotkeysGui:Add, Text, x25 y300 cWhite,  Alt+4 - калькулятор суммы лицензий (1-7, Backspace, Delete)
+    Gui, HotkeysGui:Add, Text, x25 y300 cWhite,  Alt+4 - ÐºÐ°Ð»ÑŒÐºÑƒÐ»ÑÑ‚Ð¾Ñ€ ÑÑƒÐ¼Ð¼Ñ‹ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¹ (1-7, Backspace, Delete)
     Gui, HotkeysGui:Add, Progress, x25 y318 w450 h1 c888888 Background888888
 
     Gui, HotkeysGui:Add, Text, x25 y330 cFFD700,
-    Gui, HotkeysGui:Add, Text, x25 y330 cWhite,  Ctrl+1 - условия адвоката
+    Gui, HotkeysGui:Add, Text, x25 y330 cWhite,  Ctrl+1 - ÑƒÑÐ»Ð¾Ð²Ð¸Ñ Ð°Ð´Ð²Ð¾ÐºÐ°Ñ‚Ð°
     Gui, HotkeysGui:Add, Progress, x25 y348 w450 h1 c888888 Background888888
 
     Gui, HotkeysGui:Add, Text, x25 y360 cFFD700,
-    Gui, HotkeysGui:Add, Text, x25 y360 cWhite,  Alt+Delete - полная перезагрузка скрипта
+    Gui, HotkeysGui:Add, Text, x25 y360 cWhite,  Alt+Delete - Ð¿Ð¾Ð»Ð½Ð°Ñ Ð¿ÐµÑ€ÐµÐ·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ° ÑÐºÑ€Ð¸Ð¿Ñ‚Ð°
     Gui, HotkeysGui:Add, Progress, x25 y378 w450 h1 c888888 Background888888
 
     Gui, HotkeysGui:Add, Text, x25 y390 cFFD700,
-    Gui, HotkeysGui:Add, Text, x25 y390 cWhite,  Home - отправить /фракция
+    Gui, HotkeysGui:Add, Text, x25 y390 cWhite,  Home - Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð¸Ñ‚ÑŒ /Ñ„Ñ€Ð°ÐºÑ†Ð¸Ñ
     Gui, HotkeysGui:Add, Progress, x25 y408 w450 h1 c888888 Background888888
 
     Gui, HotkeysGui:Add, Text, x25 y420 cFFD700,
-    Gui, HotkeysGui:Add, Text, x25 y420 cWhite,  NumPad+ - установить 30 строк в чате
+    Gui, HotkeysGui:Add, Text, x25 y420 cWhite,  NumPad+ - ÑƒÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ 30 ÑÑ‚Ñ€Ð¾Ðº Ð² Ñ‡Ð°Ñ‚Ðµ
     Gui, HotkeysGui:Add, Progress, x25 y438 w450 h1 c888888 Background888888
 
     Gui, HotkeysGui:Add, Text, x25 y450 cFFD700,
-    Gui, HotkeysGui:Add, Text, x25 y450 cWhite,  NumPad- - установить 10 строк в чате
+    Gui, HotkeysGui:Add, Text, x25 y450 cWhite,  NumPad- - ÑƒÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ 10 ÑÑ‚Ñ€Ð¾Ðº Ð² Ñ‡Ð°Ñ‚Ðµ
     Gui, HotkeysGui:Add, Progress, x25 y468 w450 h1 c888888 Background888888
 
     Gui, HotkeysGui:Font, s11 Bold cWhite, Segoe UI
-    Gui, HotkeysGui:Add, Button, gCloseHotkeys x175 y500 w150 h35, 🔄 Закрыть
-    Gui, HotkeysGui:Show, w500 h570, Системные комбинации
+    Gui, HotkeysGui:Add, Button, gCloseHotkeys x175 y500 w150 h35, ðŸ”„ Ð—Ð°ÐºÑ€Ñ‹Ñ‚ÑŒ
+    Gui, HotkeysGui:Show, w500 h570, Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð½Ñ‹Ðµ ÐºÐ¾Ð¼Ð±Ð¸Ð½Ð°Ñ†Ð¸Ð¸
     Gui, Main:+Disabled
     WinActivate, ahk_id %HotkeysGuiHwnd%
 }
@@ -1781,18 +1781,18 @@ GenderChanged:
 return
 CityChanged:
     GuiControlGet, CityList, Main:
-   if (CityList = "🛎Лас-Вентурас")
+   if (CityList = "ðŸ›ŽÐ›Ð°Ñ-Ð’ÐµÐ½Ñ‚ÑƒÑ€Ð°Ñ")
     CityCode := "LV"
-else if (CityList = "🛎Сан-Фиерро")
+else if (CityList = "ðŸ›ŽÐ¡Ð°Ð½-Ð¤Ð¸ÐµÑ€Ñ€Ð¾")
     CityCode := "SF"
-else if (CityList = "🛎Лос-Сантос")
+else if (CityList = "ðŸ›ŽÐ›Ð¾Ñ-Ð¡Ð°Ð½Ñ‚Ð¾Ñ")
     CityCode := "LS"
     UpdateCityName()
     IniWrite, %CityCode%, %BindIni%, Settings, City
 return
 
 ; ====================================================================================================
-; ОБРАБОТЧИКИ GUI
+; ÐžÐ‘Ð ÐÐ‘ÐžÐ¢Ð§Ð˜ÐšÐ˜ GUI
 ; ====================================================================================================
 ToggleAutoRoulette:
     GuiControlGet, AutoRouletteCheck, Main:
@@ -1831,42 +1831,42 @@ ShowInstructions:
     InstructionsGuiHwnd := WinExist()
     Gui, InstructionsGui:Color, 1A1A1A
     Gui, InstructionsGui:Font, s18 Bold, Segoe UI
-    Gui, InstructionsGui:Add, Text, x0 y15 w700 Center gStartInstrDrag cFFD700, 📖 Инструкция по биндерам
+    Gui, InstructionsGui:Add, Text, x0 y15 w700 Center gStartInstrDrag cFFD700, ðŸ“– Ð˜Ð½ÑÑ‚Ñ€ÑƒÐºÑ†Ð¸Ñ Ð¿Ð¾ Ð±Ð¸Ð½Ð´ÐµÑ€Ð°Ð¼
     Gui, InstructionsGui:Font, s10, Segoe UI
-    Gui, InstructionsGui:Add, Text, x0 y50 w700 Center cWhite, ═══════════════════════════════════════════════════════════════════════════════════════
+    Gui, InstructionsGui:Add, Text, x0 y50 w700 Center cWhite, â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     Gui, InstructionsGui:Font, s11 cFFD700, Segoe UI
-    Gui, InstructionsGui:Add, Text, x25 y90, ▸ Что такое биндер?
+    Gui, InstructionsGui:Add, Text, x25 y90, â–¸ Ð§Ñ‚Ð¾ Ñ‚Ð°ÐºÐ¾Ðµ Ð±Ð¸Ð½Ð´ÐµÑ€?
     Gui, InstructionsGui:Font, s10 cWhite, Segoe UI
-    Gui, InstructionsGui:Add, Text, x25 y115, Биндер - это инструмент для автоматической отправки команд в чат.
-    Gui, InstructionsGui:Add, Text, x25 y140, Вы нажимаете назначенную клавишу - бот отправляет заранее заданную команду.
+    Gui, InstructionsGui:Add, Text, x25 y115, Ð‘Ð¸Ð½Ð´ÐµÑ€ - ÑÑ‚Ð¾ Ð¸Ð½ÑÑ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚ Ð´Ð»Ñ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¾Ð¹ Ð¾Ñ‚Ð¿Ñ€Ð°Ð²ÐºÐ¸ ÐºÐ¾Ð¼Ð°Ð½Ð´ Ð² Ñ‡Ð°Ñ‚.
+    Gui, InstructionsGui:Add, Text, x25 y140, Ð’Ñ‹ Ð½Ð°Ð¶Ð¸Ð¼Ð°ÐµÑ‚Ðµ Ð½Ð°Ð·Ð½Ð°Ñ‡ÐµÐ½Ð½ÑƒÑŽ ÐºÐ»Ð°Ð²Ð¸ÑˆÑƒ - Ð±Ð¾Ñ‚ Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð»ÑÐµÑ‚ Ð·Ð°Ñ€Ð°Ð½ÐµÐµ Ð·Ð°Ð´Ð°Ð½Ð½ÑƒÑŽ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñƒ.
     Gui, InstructionsGui:Font, s11 cFFD700, Segoe UI
-    Gui, InstructionsGui:Add, Text, x25 y180, ▸ Как настроить?
+    Gui, InstructionsGui:Add, Text, x25 y180, â–¸ ÐšÐ°Ðº Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¸Ñ‚ÑŒ?
     Gui, InstructionsGui:Font, s10 cWhite, Segoe UI
-    Gui, InstructionsGui:Add, Text, x25 y205, 1. Откройте меню Биндеры (Ctrl+Alt+B)
-    Gui, InstructionsGui:Add, Text, x25 y230, 2. Выберите нужную строку (№1-10 на странице)
-    Gui, InstructionsGui:Add, Text, x25 y255, 3. Введите название биндера (например, "Документы")
-    Gui, InstructionsGui:Add, Text, x25 y280, 4. В большое поле введите команды (по одной на строку)
-    Gui, InstructionsGui:Add, Text, x25 y305, 5. Чтобы добавить задержку, напишите: time 2000 (ждёт 2 сек)
-    Gui, InstructionsGui:Add, Text, x25 y330, 6. Нажмите на кнопку с клавиатурой и нажмите нужную клавишу
-    Gui, InstructionsGui:Add, Text, x25 y355, 7. Поставьте галочку "Активен" и нажмите "Сохранить"
+    Gui, InstructionsGui:Add, Text, x25 y205, 1. ÐžÑ‚ÐºÑ€Ð¾Ð¹Ñ‚Ðµ Ð¼ÐµÐ½ÑŽ Ð‘Ð¸Ð½Ð´ÐµÑ€Ñ‹ (Ctrl+Alt+B)
+    Gui, InstructionsGui:Add, Text, x25 y230, 2. Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð½ÑƒÐ¶Ð½ÑƒÑŽ ÑÑ‚Ñ€Ð¾ÐºÑƒ (â„–1-10 Ð½Ð° ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ðµ)
+    Gui, InstructionsGui:Add, Text, x25 y255, 3. Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ Ð±Ð¸Ð½Ð´ÐµÑ€Ð° (Ð½Ð°Ð¿Ñ€Ð¸Ð¼ÐµÑ€, "Ð”Ð¾ÐºÑƒÐ¼ÐµÐ½Ñ‚Ñ‹")
+    Gui, InstructionsGui:Add, Text, x25 y280, 4. Ð’ Ð±Ð¾Ð»ÑŒÑˆÐ¾Ðµ Ð¿Ð¾Ð»Ðµ Ð²Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñ‹ (Ð¿Ð¾ Ð¾Ð´Ð½Ð¾Ð¹ Ð½Ð° ÑÑ‚Ñ€Ð¾ÐºÑƒ)
+    Gui, InstructionsGui:Add, Text, x25 y305, 5. Ð§Ñ‚Ð¾Ð±Ñ‹ Ð´Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð·Ð°Ð´ÐµÑ€Ð¶ÐºÑƒ, Ð½Ð°Ð¿Ð¸ÑˆÐ¸Ñ‚Ðµ: time 2000 (Ð¶Ð´Ñ‘Ñ‚ 2 ÑÐµÐº)
+    Gui, InstructionsGui:Add, Text, x25 y330, 6. ÐÐ°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð½Ð° ÐºÐ½Ð¾Ð¿ÐºÑƒ Ñ ÐºÐ»Ð°Ð²Ð¸Ð°Ñ‚ÑƒÑ€Ð¾Ð¹ Ð¸ Ð½Ð°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð½ÑƒÐ¶Ð½ÑƒÑŽ ÐºÐ»Ð°Ð²Ð¸ÑˆÑƒ
+    Gui, InstructionsGui:Add, Text, x25 y355, 7. ÐŸÐ¾ÑÑ‚Ð°Ð²ÑŒÑ‚Ðµ Ð³Ð°Ð»Ð¾Ñ‡ÐºÑƒ "ÐÐºÑ‚Ð¸Ð²ÐµÐ½" Ð¸ Ð½Ð°Ð¶Ð¼Ð¸Ñ‚Ðµ "Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ"
     Gui, InstructionsGui:Font, s11 cFFD700, Segoe UI
-    Gui, InstructionsGui:Add, Text, x25 y395, ▸ Пример настройки:
+    Gui, InstructionsGui:Add, Text, x25 y395, â–¸ ÐŸÑ€Ð¸Ð¼ÐµÑ€ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸:
     Gui, InstructionsGui:Font, s10 cWhite, Segoe UI
-    Gui, InstructionsGui:Add, Text, x25 y420, Название: "Показать удостоверение"
-    Gui, InstructionsGui:Add, Text, x25 y440, /me достал удостоверение
+    Gui, InstructionsGui:Add, Text, x25 y420, ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ: "ÐŸÐ¾ÐºÐ°Ð·Ð°Ñ‚ÑŒ ÑƒÐ´Ð¾ÑÑ‚Ð¾Ð²ÐµÑ€ÐµÐ½Ð¸Ðµ"
+    Gui, InstructionsGui:Add, Text, x25 y440, /me Ð´Ð¾ÑÑ‚Ð°Ð» ÑƒÐ´Ð¾ÑÑ‚Ð¾Ð²ÐµÑ€ÐµÐ½Ð¸Ðµ
     Gui, InstructionsGui:Add, Text, x25 y460, time 1000
-    Gui, InstructionsGui:Add, Text, x25 y480, /do Документы МВД
+    Gui, InstructionsGui:Add, Text, x25 y480, /do Ð”Ð¾ÐºÑƒÐ¼ÐµÐ½Ñ‚Ñ‹ ÐœÐ’Ð”
     Gui, InstructionsGui:Font, s11 cFFD700, Segoe UI
-    Gui, InstructionsGui:Add, Text, x25 y520, ▸ Примечания:
+    Gui, InstructionsGui:Add, Text, x25 y520, â–¸ ÐŸÑ€Ð¸Ð¼ÐµÑ‡Ð°Ð½Ð¸Ñ:
     Gui, InstructionsGui:Font, s10 cWhite, Segoe UI
-    Gui, InstructionsGui:Add, Text, x25 y545, • Нельзя использовать Ctrl+Alt+M (открытие меню)
-    Gui, InstructionsGui:Add, Text, x25 y570, • Всего доступно 20 биндеров (2 страницы по 10)
-    Gui, InstructionsGui:Add, Text, x25 y595, • Задержка указывается в миллисекундах (1000 = 1 секунда)
+    Gui, InstructionsGui:Add, Text, x25 y545, â€¢ ÐÐµÐ»ÑŒÐ·Ñ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÑŒ Ctrl+Alt+M (Ð¾Ñ‚ÐºÑ€Ñ‹Ñ‚Ð¸Ðµ Ð¼ÐµÐ½ÑŽ)
+    Gui, InstructionsGui:Add, Text, x25 y570, â€¢ Ð’ÑÐµÐ³Ð¾ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð¾ 20 Ð±Ð¸Ð½Ð´ÐµÑ€Ð¾Ð² (2 ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñ‹ Ð¿Ð¾ 10)
+    Gui, InstructionsGui:Add, Text, x25 y595, â€¢ Ð—Ð°Ð´ÐµÑ€Ð¶ÐºÐ° ÑƒÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÑ‚ÑÑ Ð² Ð¼Ð¸Ð»Ð»Ð¸ÑÐµÐºÑƒÐ½Ð´Ð°Ñ… (1000 = 1 ÑÐµÐºÑƒÐ½Ð´Ð°)
     Gui, InstructionsGui:Font, s11 Bold cWhite, Segoe UI
-    ; Кнопки расположены по центру, на одинаковом расстоянии
-    Gui, InstructionsGui:Add, Button, gShowLicensesOrder x180 y650 w160 h40, 📜 Поочерёдность
-    Gui, InstructionsGui:Add, Button, gCloseInstructions x380 y650 w160 h40, 🔄 Закрыть
-    Gui, InstructionsGui:Show, w700 h730, Инструкция
+    ; ÐšÐ½Ð¾Ð¿ÐºÐ¸ Ñ€Ð°ÑÐ¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ñ‹ Ð¿Ð¾ Ñ†ÐµÐ½Ñ‚Ñ€Ñƒ, Ð½Ð° Ð¾Ð´Ð¸Ð½Ð°ÐºÐ¾Ð²Ð¾Ð¼ Ñ€Ð°ÑÑÑ‚Ð¾ÑÐ½Ð¸Ð¸
+    Gui, InstructionsGui:Add, Button, gShowLicensesOrder x180 y650 w160 h40, ðŸ“œ ÐŸÐ¾Ð¾Ñ‡ÐµÑ€Ñ‘Ð´Ð½Ð¾ÑÑ‚ÑŒ
+    Gui, InstructionsGui:Add, Button, gCloseInstructions x380 y650 w160 h40, ðŸ”„ Ð—Ð°ÐºÑ€Ñ‹Ñ‚ÑŒ
+    Gui, InstructionsGui:Show, w700 h730, Ð˜Ð½ÑÑ‚Ñ€ÑƒÐºÑ†Ð¸Ñ
     Gui, Main:+Disabled
     WinActivate, ahk_id %InstructionsGuiHwnd%
 return
@@ -1884,7 +1884,7 @@ UpdateStatusTimer:
 return
 
 ; ====================================================================================================
-; ТАЙМЕРЫ GUI
+; Ð¢ÐÐ™ÐœÐ•Ð Ð« GUI
 ; ====================================================================================================
 ShowTimerManager() {
     global
@@ -1898,11 +1898,11 @@ ShowTimerManager() {
     TimerGuiHwnd := WinExist()
     Gui, TimerGui:Color, 1A1A1A
     Gui, TimerGui:Font, s18 Bold, Segoe UI
-    Gui, TimerGui:Add, Text, vTimerDragArea x25 y15 gStartTimerDrag cFFD700, ⏰ Управление таймерами
+    Gui, TimerGui:Add, Text, vTimerDragArea x25 y15 gStartTimerDrag cFFD700, â° Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ñ‚Ð°Ð¹Ð¼ÐµÑ€Ð°Ð¼Ð¸
     Gui, TimerGui:Font, s10, Segoe UI
-    Gui, TimerGui:Add, Text, x25 y50 cWhite, ═══════════════════════════════════════════════════════════════════
+    Gui, TimerGui:Add, Text, x25 y50 cWhite, â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     Gui, TimerGui:Font, s11 Bold, Segoe UI
-    Gui, TimerGui:Add, ListView, vTimerListView x25 y70 w450 h250 cFFD700 Background2D2D2D AltSubmit gTimerListClick, №|Команда|Интервал (сек)|Статус
+    Gui, TimerGui:Add, ListView, vTimerListView x25 y70 w450 h250 cFFD700 Background2D2D2D AltSubmit gTimerListClick, â„–|ÐšÐ¾Ð¼Ð°Ð½Ð´Ð°|Ð˜Ð½Ñ‚ÐµÑ€Ð²Ð°Ð» (ÑÐµÐº)|Ð¡Ñ‚Ð°Ñ‚ÑƒÑ
     IniRead, Col1, %BindIni%, TimerListView, Col1, 40
     IniRead, Col2, %BindIni%, TimerListView, Col2, 180
     IniRead, Col3, %BindIni%, TimerListView, Col3, 100
@@ -1912,25 +1912,25 @@ ShowTimerManager() {
     LV_ModifyCol(3, Col3)
     LV_ModifyCol(4, Col4)
     Gui, TimerGui:Font, s10 Bold cFFD700, Segoe UI
-    Gui, TimerGui:Add, Text, x25 y340, ➕ Добавить новый таймер:
+    Gui, TimerGui:Add, Text, x25 y340, âž• Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð½Ð¾Ð²Ñ‹Ð¹ Ñ‚Ð°Ð¹Ð¼ÐµÑ€:
     Gui, TimerGui:Font, s11 cWhite, Segoe UI
-    Gui, TimerGui:Add, Text, x25 y370, Команда:
+    Gui, TimerGui:Add, Text, x25 y370, ÐšÐ¾Ð¼Ð°Ð½Ð´Ð°:
     Gui, TimerGui:Add, Edit, vNewCommand x25 y395 w250 h35 cFFD700 Background000000, /time
-    Gui, TimerGui:Add, Text, x290 y370, Секунды:
+    Gui, TimerGui:Add, Text, x290 y370, Ð¡ÐµÐºÑƒÐ½Ð´Ñ‹:
     Gui, TimerGui:Add, Edit, vNewSeconds x290 y395 w100 h35 cFFD700 Background000000, 30
     GuiControlGet, hTimerCmd, TimerGui:Hwnd, NewCommand
     GuiControlGet, hTimerSec, TimerGui:Hwnd, NewSeconds
     CtlColors.Attach(hTimerCmd, "2D2D2D", "FFD700")
     CtlColors.Attach(hTimerSec, "2D2D2D", "FFD700")
     Gui, TimerGui:Font, s11 Bold cWhite, Segoe UI
-    Gui, TimerGui:Add, Button, gAddNewTimer x400 y395 w75 h35, ✅ Добавить
-    Gui, TimerGui:Add, Button, gStartSelectedTimer x25 y460 w140 h40, ▶ Запустить
-    Gui, TimerGui:Add, Button, gStopSelectedTimer x175 y460 w140 h40, ⏸ Остановить
-    Gui, TimerGui:Add, Button, gRemoveSelectedTimer x325 y460 w140 h40, ❌ Удалить
-    Gui, TimerGui:Add, Button, gStartAllTimersBtn x25 y515 w220 h40, 🟢 Запустить все
-    Gui, TimerGui:Add, Button, gStopAllTimersBtn x255 y515 w220 h40, 🔴 Остановить все
-    Gui, TimerGui:Add, Button, gCloseTimerManager x25 y570 w220 h40, 🔄 Назад к настройкам
-    Gui, TimerGui:Add, Button, gSaveTimersAndRestart x255 y570 w220 h40, 💾 Сохранить и запустить
+    Gui, TimerGui:Add, Button, gAddNewTimer x400 y395 w75 h35, âœ… Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ
+    Gui, TimerGui:Add, Button, gStartSelectedTimer x25 y460 w140 h40, â–¶ Ð—Ð°Ð¿ÑƒÑÑ‚Ð¸Ñ‚ÑŒ
+    Gui, TimerGui:Add, Button, gStopSelectedTimer x175 y460 w140 h40, â¸ ÐžÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ
+    Gui, TimerGui:Add, Button, gRemoveSelectedTimer x325 y460 w140 h40, âŒ Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ
+    Gui, TimerGui:Add, Button, gStartAllTimersBtn x25 y515 w220 h40, ðŸŸ¢ Ð—Ð°Ð¿ÑƒÑÑ‚Ð¸Ñ‚ÑŒ Ð²ÑÐµ
+    Gui, TimerGui:Add, Button, gStopAllTimersBtn x255 y515 w220 h40, ðŸ”´ ÐžÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ Ð²ÑÐµ
+    Gui, TimerGui:Add, Button, gCloseTimerManager x25 y570 w220 h40, ðŸ”„ ÐÐ°Ð·Ð°Ð´ Ðº Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ°Ð¼
+    Gui, TimerGui:Add, Button, gSaveTimersAndRestart x255 y570 w220 h40, ðŸ’¾ Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ Ð¸ Ð·Ð°Ð¿ÑƒÑÑ‚Ð¸Ñ‚ÑŒ
     Gosub, RefreshTimerList
     Gui, TimerGui:Show, Hide
     AnimateWindowShow(TimerGuiHwnd)
@@ -1962,7 +1962,7 @@ RefreshTimerList:
     Gui, TimerGui:Default
     LV_Delete()
     For index, timer in CurrentTimers {
-        status := timer.running ? "✅ Активен" : "⏸ Остановлен"
+        status := timer.running ? "âœ… ÐÐºÑ‚Ð¸Ð²ÐµÐ½" : "â¸ ÐžÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÐµÐ½"
         LV_Add("", index, timer.command, timer.seconds, status)
     }
 return
@@ -2043,7 +2043,7 @@ SaveTimerListColumns() {
 }
 
 ; ====================================================================================================
-; БИНДЕРЫ GUI
+; Ð‘Ð˜ÐÐ”Ð•Ð Ð« GUI
 ; ====================================================================================================
 ShowBinderManager() {
     global
@@ -2057,11 +2057,11 @@ ShowBinderManager() {
     BinderGuiHwnd := WinExist()
     Gui, BinderGui:Color, 1A1A1A
     Gui, BinderGui:Font, s18 Bold, Segoe UI
-    Gui, BinderGui:Add, Text, vBinderDragArea x25 y15 gStartBinderDrag cFFD700, 🔗 Управление биндерами
+    Gui, BinderGui:Add, Text, vBinderDragArea x25 y15 gStartBinderDrag cFFD700, ðŸ”— Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð±Ð¸Ð½Ð´ÐµÑ€Ð°Ð¼Ð¸
     Gui, BinderGui:Font, s10, Segoe UI
-    Gui, BinderGui:Add, Text, x25 y50 cWhite, ═══════════════════════════════════════════════════════════════════
+    Gui, BinderGui:Add, Text, x25 y50 cWhite, â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     Gui, BinderGui:Font, s11 Bold, Segoe UI
-    Gui, BinderGui:Add, ListView, vBinderListView x25 y70 w590 h250 cFFD700 Background2D2D2D AltSubmit gBinderListClick, №|Статус|Клавиша|Название
+    Gui, BinderGui:Add, ListView, vBinderListView x25 y70 w590 h250 cFFD700 Background2D2D2D AltSubmit gBinderListClick, â„–|Ð¡Ñ‚Ð°Ñ‚ÑƒÑ|ÐšÐ»Ð°Ð²Ð¸ÑˆÐ°|ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ
     IniRead, BCol1, %BindIni%, BinderListView, Col1, 35
     IniRead, BCol2, %BindIni%, BinderListView, Col2, 45
     IniRead, BCol3, %BindIni%, BinderListView, Col3, 100
@@ -2072,29 +2072,29 @@ ShowBinderManager() {
     LV_ModifyCol(4, BCol4)
     Gui, BinderGui:Font, s9 cWhite, Segoe UI
     Gui, BinderGui:Font, s10 Bold cFFD700, Segoe UI
-    Gui, BinderGui:Add, Text, x25 y340, ✏️ Редактирование выбранного биндера:
+    Gui, BinderGui:Add, Text, x25 y340, âœï¸ Ð ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ Ð²Ñ‹Ð±Ñ€Ð°Ð½Ð½Ð¾Ð³Ð¾ Ð±Ð¸Ð½Ð´ÐµÑ€Ð°:
     Gui, BinderGui:Font, s11 cWhite, Segoe UI
-    Gui, BinderGui:Add, Text, x25 y365, Название биндера (отображается в списке, максимум 8 символов):
+    Gui, BinderGui:Add, Text, x25 y365, ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ Ð±Ð¸Ð½Ð´ÐµÑ€Ð° (Ð¾Ñ‚Ð¾Ð±Ñ€Ð°Ð¶Ð°ÐµÑ‚ÑÑ Ð² ÑÐ¿Ð¸ÑÐºÐµ, Ð¼Ð°ÐºÑÐ¸Ð¼ÑƒÐ¼ 8 ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð²):
     Gui, BinderGui:Add, Edit, vEditBinderName x25 y385 w590 h30 Center cFFD700 Background000000 -E0x200 Limit8,
-    Gui, BinderGui:Add, Text, x25 y425, Команды (time 2000 = задержка 2 сек):
+    Gui, BinderGui:Add, Text, x25 y425, ÐšÐ¾Ð¼Ð°Ð½Ð´Ñ‹ (time 2000 = Ð·Ð°Ð´ÐµÑ€Ð¶ÐºÐ° 2 ÑÐµÐº):
     Gui, BinderGui:Add, Edit, vEditBinderText x25 y445 w590 h80 cFFD700 Background000000 -E0x200,
     GuiControlGet, hEditName, BinderGui:Hwnd, EditBinderName
     GuiControlGet, hEditText, BinderGui:Hwnd, EditBinderText
     CtlColors.Attach(hEditName, "2D2D2D", "FFD700")
     CtlColors.Attach(hEditText, "2D2D2D", "FFD700")
     Gui, BinderGui:Font, s11 cWhite, Segoe UI
-    Gui, BinderGui:Add, Text, x170 y540, Клавиша (нажмите на кнопку и нажмите клавишу):
+    Gui, BinderGui:Add, Text, x170 y540, ÐšÐ»Ð°Ð²Ð¸ÑˆÐ° (Ð½Ð°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð½Ð° ÐºÐ½Ð¾Ð¿ÐºÑƒ Ð¸ Ð½Ð°Ð¶Ð¼Ð¸Ñ‚Ðµ ÐºÐ»Ð°Ð²Ð¸ÑˆÑƒ):
     Gui, BinderGui:Add, Edit, vEditBinderKeyReadOnly x250 y565 w150 h35 cFFD700 Background000000 ReadOnly Center,
-    Gui, BinderGui:Add, Button, vCaptureKeyBtn gStartKeyCapture x410 y565 w35 h35, ⌨️
-    Gui, BinderGui:Add, Checkbox, vCheckboxActive x470 y565 w100 h35 cFFD700, Активен
+    Gui, BinderGui:Add, Button, vCaptureKeyBtn gStartKeyCapture x410 y565 w35 h35, âŒ¨ï¸
+    Gui, BinderGui:Add, Checkbox, vCheckboxActive x470 y565 w100 h35 cFFD700, ÐÐºÑ‚Ð¸Ð²ÐµÐ½
     Gui, BinderGui:Font, s11 Bold cWhite, Segoe UI
-    Gui, BinderGui:Add, Button, gSaveCurrentBinder x25 y620 w140 h35, 💾 Сохранить
-    Gui, BinderGui:Add, Button, gClearCurrentBinder x180 y620 w140 h35, 🗑️ Очистить
-    Gui, BinderGui:Add, Button, gPrevBinderPage x335 y620 w70 h35, ◀
-    Gui, BinderGui:Add, Text, vPageInfo x410 y628 w80 h25 Center cFFD700, Страница 1/2
-    Gui, BinderGui:Add, Button, gNextBinderPage x495 y620 w70 h35, ▶
-    Gui, BinderGui:Add, Button, gCloseBinderManager x580 y620 w35 h35, ✕
-    Gui, BinderGui:Add, Button, gSaveAllBinders x25 y660 w620 h30, 💾 Сохранить все изменения
+    Gui, BinderGui:Add, Button, gSaveCurrentBinder x25 y620 w140 h35, ðŸ’¾ Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ
+    Gui, BinderGui:Add, Button, gClearCurrentBinder x180 y620 w140 h35, ðŸ—‘ï¸ ÐžÑ‡Ð¸ÑÑ‚Ð¸Ñ‚ÑŒ
+    Gui, BinderGui:Add, Button, gPrevBinderPage x335 y620 w70 h35, â—€
+    Gui, BinderGui:Add, Text, vPageInfo x410 y628 w80 h25 Center cFFD700, Ð¡Ñ‚Ñ€Ð°Ð½Ð¸Ñ†Ð° 1/2
+    Gui, BinderGui:Add, Button, gNextBinderPage x495 y620 w70 h35, â–¶
+    Gui, BinderGui:Add, Button, gCloseBinderManager x580 y620 w35 h35, âœ•
+    Gui, BinderGui:Add, Button, gSaveAllBinders x25 y660 w620 h30, ðŸ’¾ Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ Ð²ÑÐµ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ñ
     Gosub, RefreshBinderListSub
     SelectedBinderRow := 0
     Gui, BinderGui:Show, Hide
@@ -2107,7 +2107,7 @@ return
 StartKeyCapture:
     WaitingForKey := 1
     TempKeyBind := ""
-    GuiControl, BinderGui:, EditBinderKeyReadOnly, [Ожидание нажатия...]
+    GuiControl, BinderGui:, EditBinderKeyReadOnly, [ÐžÐ¶Ð¸Ð´Ð°Ð½Ð¸Ðµ Ð½Ð°Ð¶Ð°Ñ‚Ð¸Ñ...]
 return
 #If (WaitingForKey = 1)
 ~*LButton:: return
@@ -2222,7 +2222,7 @@ UpdateBinderEditFieldsSub:
                     tempDisplay .= "Shift+"
                 keyPart := StrReplace(StrReplace(StrReplace(displayKey, "^", ""), "!", ""), "+", "")
                 if (keyPart = "Space")
-                    keyPart := "Пробел"
+                    keyPart := "ÐŸÑ€Ð¾Ð±ÐµÐ»"
                 else if (keyPart = "Enter")
                     keyPart := "Enter"
                 else if (keyPart = "Tab")
@@ -2230,13 +2230,13 @@ UpdateBinderEditFieldsSub:
                 else if (keyPart = "Delete")
                     keyPart := "Delete"
                 else if (keyPart = "Up")
-                    keyPart := "↑"
+                    keyPart := "â†‘"
                 else if (keyPart = "Down")
-                    keyPart := "↓"
+                    keyPart := "â†“"
                 else if (keyPart = "Left")
-                    keyPart := "←"
+                    keyPart := "â†"
                 else if (keyPart = "Right")
-                    keyPart := "→"
+                    keyPart := "â†’"
                 else if (RegExMatch(keyPart, "^F\d+$"))
                     keyPart := keyPart
                 else if (StrLen(keyPart) = 1)
@@ -2341,7 +2341,7 @@ SaveBinderListColumns() {
 }
 
 ; ====================================================================================================
-; ОБЩИЕ ПОДПРОГРАММЫ
+; ÐžÐ‘Ð©Ð˜Ð• ÐŸÐžÐ”ÐŸÐ ÐžÐ“Ð ÐÐœÐœÐ«
 ; ====================================================================================================
 UpdatePreview:
     UpdatePreviewFunc()
@@ -2350,13 +2350,13 @@ return
 UpdateCityName() {
     global CityCode, CityName
     if (CityCode = "LV")
-        CityName := "Лас-Вентурас"
+        CityName := "Ð›Ð°Ñ-Ð’ÐµÐ½Ñ‚ÑƒÑ€Ð°Ñ"
     else if (CityCode = "SF")
-        CityName := "Сан-Фиерро"
+        CityName := "Ð¡Ð°Ð½-Ð¤Ð¸ÐµÑ€Ñ€Ð¾"
     else if (CityCode = "LS")
-        CityName := "Лос-Сантос"
+        CityName := "Ð›Ð¾Ñ-Ð¡Ð°Ð½Ñ‚Ð¾Ñ"
     else
-        CityName := "Лас-Вентурас"
+        CityName := "Ð›Ð°Ñ-Ð’ÐµÐ½Ñ‚ÑƒÑ€Ð°Ñ"
 }
 
 ApplyTheme:
@@ -2414,14 +2414,14 @@ CheckUpdatesManual:
 return
 
 ShowAbout:
-    MsgBox, 4096, О программе,
+    MsgBox, 4096, Ðž Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ðµ,
     (
-        МЭРИЯ HELPER v%ScriptVersion%
+        ÐœÐ­Ð Ð˜Ð¯ HELPER v%ScriptVersion%
 
-        Автор: Melanie Vanerlon
+        ÐÐ²Ñ‚Ð¾Ñ€: Melanie Vanerlon
         GitHub: https://github.com/skisasa56-max/merya-helper
 
-        При запуске автоматически проверяется наличие обновлений.
+        ÐŸÑ€Ð¸ Ð·Ð°Ð¿ÑƒÑÐºÐµ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÑ‚ÑÑ Ð½Ð°Ð»Ð¸Ñ‡Ð¸Ðµ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ð¹.
     )
 return
 
@@ -2448,7 +2448,7 @@ RefreshBinderList:
         idx := startIdx + A_Index - 1
         if (idx <= Binders.Length()) {
             binder := Binders[idx]
-            status := binder.active ? "🟢" : "🔴"
+            status := binder.active ? "ðŸŸ¢" : "ðŸ”´"
             keyDisplay := binder.key
             if (keyDisplay != "") {
                 tempDisplay := ""
@@ -2460,7 +2460,7 @@ RefreshBinderList:
                     tempDisplay .= "Shift+"
                 keyPart := StrReplace(StrReplace(StrReplace(keyDisplay, "^", ""), "!", ""), "+", "")
                 if (keyPart = "Space")
-                    keyPart := "Пробел"
+                    keyPart := "ÐŸÑ€Ð¾Ð±ÐµÐ»"
                 else if (keyPart = "Enter")
                     keyPart := "Enter"
                 else if (keyPart = "Tab")
@@ -2468,34 +2468,34 @@ RefreshBinderList:
                 else if (keyPart = "Delete")
                     keyPart := "Delete"
                 else if (keyPart = "Up")
-                    keyPart := "↑"
+                    keyPart := "â†‘"
                 else if (keyPart = "Down")
-                    keyPart := "↓"
+                    keyPart := "â†“"
                 else if (keyPart = "Left")
-                    keyPart := "←"
+                    keyPart := "â†"
                 else if (keyPart = "Right")
-                    keyPart := "→"
+                    keyPart := "â†’"
                 else if (RegExMatch(keyPart, "^F\d+$"))
                     keyPart := keyPart
                 else if (StrLen(keyPart) = 1)
                     StringUpper, keyPart, keyPart
                 keyDisplay := tempDisplay . keyPart
             } else
-                keyDisplay := "—"
+                keyDisplay := "â€”"
             displayName := binder.name
             if (displayName = "")
                 displayName := SubStr(binder.text, 1, 27)
             if (displayName = "")
-                displayName := "—"
+                displayName := "â€”"
             LV_Add("", rowNum, status, keyDisplay, displayName)
         } else
-            LV_Add("", rowNum, "⚪", "—", "—")
+            LV_Add("", rowNum, "âšª", "â€”", "â€”")
         rowNum++
     }
 return
 
 ; ====================================================================================================
-; КОНТЕКСТНЫЕ ГОРЯЧИЕ КЛАВИШИ ДЛЯ АДВОКАТСКОГО МОДУЛЯ
+; ÐšÐžÐÐ¢Ð•ÐšÐ¡Ð¢ÐÐ«Ð• Ð“ÐžÐ Ð¯Ð§Ð˜Ð• ÐšÐ›ÐÐ’Ð˜Ð¨Ð˜ Ð”Ð›Ð¯ ÐÐ”Ð’ÐžÐšÐÐ¢Ð¡ÐšÐžÐ“Ðž ÐœÐžÐ”Ð£Ð›Ð¯
 ; ====================================================================================================
 #If WinActive("ahk_exe gta_sa.exe") && (LicenseMenuMode > 0)
 $1::
@@ -2510,13 +2510,13 @@ $7::
     Price := LicPrices[Idx]
     FormattedPrice := RegExReplace(Price, "\G\d+?(?=(\d{3})+(?!\d))", "$0.")
     if (LicenseMenuMode == 1) {
-        SendChat("Стоимость лицензии на " Name " - " FormattedPrice "$.")
+        SendChat("Ð¡Ñ‚Ð¾Ð¸Ð¼Ð¾ÑÑ‚ÑŒ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¸ Ð½Ð° " Name " - " FormattedPrice "$.")
         LicenseMenuMode := 0
     } else if (LicenseMenuMode == 2) {
         TempTotal += Price
         LastPrice := Price
         FormattedTotal := RegExReplace(TempTotal, "\G\d+?(?=(\d{3})+(?!\d))", "$0.")
-        addChatMessage("{FF0000}[" Tag "] {00FF00}Добавлено: {FFFFFF}" Name ". Итого: {FFFF00}" FormattedTotal "$")
+        addChatMessage("{FF0000}[" Tag "] {00FF00}Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¾: {FFFFFF}" Name ". Ð˜Ñ‚Ð¾Ð³Ð¾: {FFFF00}" FormattedTotal "$")
     }
 return
 #If WinActive("ahk_exe gta_sa.exe")
@@ -2527,13 +2527,13 @@ $Delete::
         TempTotal -= LastPrice
         LastPrice := 0
         FormattedTotal := RegExReplace(TempTotal, "\G\d+?(?=(\d{3})+(?!\d))", "$0.")
-        addChatMessage("{FF0000}[" Tag "] {FF4500}Последнее действие отменено. {FFFFFF}Текущая сумма: {FFFF00}" FormattedTotal "$")
+        addChatMessage("{FF0000}[" Tag "] {FF4500}ÐŸÐ¾ÑÐ»ÐµÐ´Ð½ÐµÐµ Ð´ÐµÐ¹ÑÑ‚Ð²Ð¸Ðµ Ð¾Ñ‚Ð¼ÐµÐ½ÐµÐ½Ð¾. {FFFFFF}Ð¢ÐµÐºÑƒÑ‰Ð°Ñ ÑÑƒÐ¼Ð¼Ð°: {FFFF00}" FormattedTotal "$")
     }
 return
 $Backspace::
     if (TempTotal > 0) {
         FormattedTotal := RegExReplace(TempTotal, "\G\d+?(?=(\d{3})+(?!\d))", "$0.")
-        SendChat("Общая стоимость лицензий составляет " FormattedTotal "$. Вы согласны?")
+        SendChat("ÐžÐ±Ñ‰Ð°Ñ ÑÑ‚Ð¾Ð¸Ð¼Ð¾ÑÑ‚ÑŒ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¹ ÑÐ¾ÑÑ‚Ð°Ð²Ð»ÑÐµÑ‚ " FormattedTotal "$. Ð’Ñ‹ ÑÐ¾Ð³Ð»Ð°ÑÐ½Ñ‹?")
     }
     LicenseMenuMode := 0
 return
@@ -2542,8 +2542,8 @@ return
 #If WinActive("ahk_exe gta_sa.exe") && (LicenseProcess == 2)
 $Backspace::
     LicenseProcess := 3
-    addChatMessage("{FF0000}[" Tag "] {00FF00}Продолжаем. {FFFFFF}Открываю меню...")
-    SendChat("/и " TargetID)
+    addChatMessage("{FF0000}[" Tag "] {00FF00}ÐŸÑ€Ð¾Ð´Ð¾Ð»Ð¶Ð°ÐµÐ¼. {FFFFFF}ÐžÑ‚ÐºÑ€Ñ‹Ð²Ð°ÑŽ Ð¼ÐµÐ½ÑŽ...")
+    SendChat("/Ð¸ " TargetID)
     Sleep 1000
     Loop, 10 {
         Send, {Up}
@@ -2554,11 +2554,11 @@ $Backspace::
         Sleep, 50
     }
     Send, {Enter}
-    addChatMessage("{FF0000}[" Tag "] {FFFFFF}Продай лицензии и нажми {FFFF00}Backspace{FFFFFF} для финала.")
+    addChatMessage("{FF0000}[" Tag "] {FFFFFF}ÐŸÑ€Ð¾Ð´Ð°Ð¹ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¸ Ð¸ Ð½Ð°Ð¶Ð¼Ð¸ {FFFF00}Backspace{FFFFFF} Ð´Ð»Ñ Ñ„Ð¸Ð½Ð°Ð»Ð°.")
 return
 $Delete::
     LicenseProcess := 0
-    addChatMessage("{FF0000}[" Tag "] {FF4500}Продажа отменена.")
+    addChatMessage("{FF0000}[" Tag "] {FF4500}ÐŸÑ€Ð¾Ð´Ð°Ð¶Ð° Ð¾Ñ‚Ð¼ÐµÐ½ÐµÐ½Ð°.")
 return
 #If WinActive("ahk_exe gta_sa.exe")
 
@@ -2566,13 +2566,13 @@ return
 $Backspace::
     LicenseProcess := 0
     if (Gender == 1)
-        SendChat("/me зафиксировал факт оплаты")
+        SendChat("/me Ð·Ð°Ñ„Ð¸ÐºÑÐ¸Ñ€Ð¾Ð²Ð°Ð» Ñ„Ð°ÐºÑ‚ Ð¾Ð¿Ð»Ð°Ñ‚Ñ‹")
     else
-        SendChat("/me зафиксировала факт оплаты")
+        SendChat("/me Ð·Ð°Ñ„Ð¸ÐºÑÐ¸Ñ€Ð¾Ð²Ð°Ð»Ð° Ñ„Ð°ÐºÑ‚ Ð¾Ð¿Ð»Ð°Ñ‚Ñ‹")
     Sleep 1960
-    SendChat("/todo Всего вам доброго*внося в электронный реестр приобретённые лицензии")
+    SendChat("/todo Ð’ÑÐµÐ³Ð¾ Ð²Ð°Ð¼ Ð´Ð¾Ð±Ñ€Ð¾Ð³Ð¾*Ð²Ð½Ð¾ÑÑ Ð² ÑÐ»ÐµÐºÑ‚Ñ€Ð¾Ð½Ð½Ñ‹Ð¹ Ñ€ÐµÐµÑÑ‚Ñ€ Ð¿Ñ€Ð¸Ð¾Ð±Ñ€ÐµÑ‚Ñ‘Ð½Ð½Ñ‹Ðµ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¸")
     Sleep 1960
-    SendChat("*Посмотреть список лицензий можно, прописав: /лиц ID")
+    SendChat("*ÐŸÐ¾ÑÐ¼Ð¾Ñ‚Ñ€ÐµÑ‚ÑŒ ÑÐ¿Ð¸ÑÐ¾Ðº Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¹ Ð¼Ð¾Ð¶Ð½Ð¾, Ð¿Ñ€Ð¾Ð¿Ð¸ÑÐ°Ð²: /Ð»Ð¸Ñ† ID")
     Sleep 60
     SendChat("/time")
 return
@@ -2583,35 +2583,35 @@ return
 ~$1::
     SmsSent := false
     if (Gender == 1)
-        SendChat("/me закрыл дело и выключил компьютер")
+        SendChat("/me Ð·Ð°ÐºÑ€Ñ‹Ð» Ð´ÐµÐ»Ð¾ Ð¸ Ð²Ñ‹ÐºÐ»ÑŽÑ‡Ð¸Ð» ÐºÐ¾Ð¼Ð¿ÑŒÑŽÑ‚ÐµÑ€")
     else
-        SendChat("/me закрыла дело и выключила компьютер")
+        SendChat("/me Ð·Ð°ÐºÑ€Ñ‹Ð»Ð° Ð´ÐµÐ»Ð¾ Ð¸ Ð²Ñ‹ÐºÐ»ÑŽÑ‡Ð¸Ð»Ð° ÐºÐ¾Ð¼Ð¿ÑŒÑŽÑ‚ÐµÑ€")
     Sleep 50
     SendChat("/time")
 return
 ~$0::
     SmsSent := false
-    addChatMessage("{FF0000}[" Tag "] {FFFFFF}Отмена.")
+    addChatMessage("{FF0000}[" Tag "] {FFFFFF}ÐžÑ‚Ð¼ÐµÐ½Ð°.")
 return
 #If WinActive("ahk_exe gta_sa.exe")
 
 #If WinActive("ahk_exe gta_sa.exe") && (LawyerResult > 0)
 $Backspace::
     if (LawyerResult == 1) {
-        SendChat("Гражданин " LawyerTargetName " успешно оправдан и выпущен на свободу. Всего хорошего, обращайтесь ещё!")
+        SendChat("Ð“Ñ€Ð°Ð¶Ð´Ð°Ð½Ð¸Ð½ " LawyerTargetName " ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ Ð¾Ð¿Ñ€Ð°Ð²Ð´Ð°Ð½ Ð¸ Ð²Ñ‹Ð¿ÑƒÑ‰ÐµÐ½ Ð½Ð° ÑÐ²Ð¾Ð±Ð¾Ð´Ñƒ. Ð’ÑÐµÐ³Ð¾ Ñ…Ð¾Ñ€Ð¾ÑˆÐµÐ³Ð¾, Ð¾Ð±Ñ€Ð°Ñ‰Ð°Ð¹Ñ‚ÐµÑÑŒ ÐµÑ‰Ñ‘!")
     } else if (LawyerResult == 2) {
-        SendChat("К сожалению гражданин " LawyerTargetName " не получилось оправдать. Сожалею.")
+        SendChat("Ðš ÑÐ¾Ð¶Ð°Ð»ÐµÐ½Ð¸ÑŽ Ð³Ñ€Ð°Ð¶Ð´Ð°Ð½Ð¸Ð½ " LawyerTargetName " Ð½Ðµ Ð¿Ð¾Ð»ÑƒÑ‡Ð¸Ð»Ð¾ÑÑŒ Ð¾Ð¿Ñ€Ð°Ð²Ð´Ð°Ñ‚ÑŒ. Ð¡Ð¾Ð¶Ð°Ð»ÐµÑŽ.")
     }
     LawyerResult := 0
 return
 $Delete::
     LawyerResult := 0
-    addChatMessage("{FF0000}[" Tag "] {FFFFFF}Отмена отправки итога.")
+    addChatMessage("{FF0000}[" Tag "] {FFFFFF}ÐžÑ‚Ð¼ÐµÐ½Ð° Ð¾Ñ‚Ð¿Ñ€Ð°Ð²ÐºÐ¸ Ð¸Ñ‚Ð¾Ð³Ð°.")
 return
 #If WinActive("ahk_exe gta_sa.exe")
 
 ; ====================================================================================================
-; АВТОЗАПУСК
+; ÐÐ’Ð¢ÐžÐ—ÐÐŸÐ£Ð¡Ðš
 ; ====================================================================================================
 LoadTimers()
 LoadBinders()
@@ -2621,9 +2621,9 @@ RegisterAllBinderHotkeys()
 SetTimer, UpdateStatusTimer, 1000
 SetTimer, CheckAutoProfile, 100
 ShowMainGui()
-; Сообщение о запуске, если игра активна
+; Ð¡Ð¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ Ð¾ Ð·Ð°Ð¿ÑƒÑÐºÐµ, ÐµÑÐ»Ð¸ Ð¸Ð³Ñ€Ð° Ð°ÐºÑ‚Ð¸Ð²Ð½Ð°
 if WinActive("ahk_exe gta_sa.exe")
-    addChatMessage("{00FF00}[" Tag "] Биндер запущен, готов к работе!")
+    addChatMessage("{00FF00}[" Tag "] Ð‘Ð¸Ð½Ð´ÐµÑ€ Ð·Ð°Ð¿ÑƒÑ‰ÐµÐ½, Ð³Ð¾Ñ‚Ð¾Ð² Ðº Ñ€Ð°Ð±Ð¾Ñ‚Ðµ!")
 WinActivate, ahk_id %MainGuiHwnd%
 WinShow, ahk_id %MainGuiHwnd%
 WinRestore, ahk_id %MainGuiHwnd%
@@ -2655,7 +2655,7 @@ SaveAllSettings() {
 }
 
 ; ====================================================================================================
-; ОТСЛЕЖИВАНИЕ АКТИВНОСТИ В ИГРЕ (не требует правки SAMP.ahk)
+; ÐžÐ¢Ð¡Ð›Ð•Ð–Ð˜Ð’ÐÐÐ˜Ð• ÐÐšÐ¢Ð˜Ð’ÐÐžÐ¡Ð¢Ð˜ Ð’ Ð˜Ð“Ð Ð• (Ð½Ðµ Ñ‚Ñ€ÐµÐ±ÑƒÐµÑ‚ Ð¿Ñ€Ð°Ð²ÐºÐ¸ SAMP.ahk)
 ; ====================================================================================================
 #IfWinActive, ahk_exe gta_sa.exe
 ~*LButton:: MarkActivity()
@@ -2716,7 +2716,7 @@ return
 
 CheckIdle:
     global LastActivityTime, UserIsActive
-    if (A_TickCount - LastActivityTime > 600000) {  ; 10 минут
+    if (A_TickCount - LastActivityTime > 600000) {  ; 10 Ð¼Ð¸Ð½ÑƒÑ‚
         if (UserIsActive) {
             UserIsActive := 0
             UpdateStatusAndTime()
@@ -2725,7 +2725,7 @@ CheckIdle:
 return
 
 ; ====================================================================================================
-; ОКНО СПИСКА ЛИЦЕНЗИЙ (ДЛЯ ПООЧЕРЁДНОСТИ) - УВЕЛИЧЕНО И ВЫРОВНЕНО
+; ÐžÐšÐÐž Ð¡ÐŸÐ˜Ð¡ÐšÐ Ð›Ð˜Ð¦Ð•ÐÐ—Ð˜Ð™ (Ð”Ð›Ð¯ ÐŸÐžÐžÐ§Ð•Ð ÐÐ”ÐÐžÐ¡Ð¢Ð˜) - Ð£Ð’Ð•Ð›Ð˜Ð§Ð•ÐÐž Ð˜ Ð’Ð«Ð ÐžÐ’ÐÐ•ÐÐž
 ; ====================================================================================================
 ShowLicensesOrder() {
     global LicensesOrderGuiHwnd, MainGuiHwnd
@@ -2738,21 +2738,21 @@ ShowLicensesOrder() {
     LicensesOrderGuiHwnd := WinExist()
     Gui, LicensesOrderGui:Color, 1A1A1A
     Gui, LicensesOrderGui:Font, s16 Bold, Segoe UI
-    Gui, LicensesOrderGui:Add, Text, x0 y15 w500 Center gDragLicensesOrder cFFD700, 📜 Список лицензий (поочерёдность)
+    Gui, LicensesOrderGui:Add, Text, x0 y15 w500 Center gDragLicensesOrder cFFD700, ðŸ“œ Ð¡Ð¿Ð¸ÑÐ¾Ðº Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¹ (Ð¿Ð¾Ð¾Ñ‡ÐµÑ€Ñ‘Ð´Ð½Ð¾ÑÑ‚ÑŒ)
     Gui, LicensesOrderGui:Font, s10, Segoe UI
-    Gui, LicensesOrderGui:Add, Text, x0 y50 w500 Center cWhite, ═══════════════════════════════════════════════════════════
+    Gui, LicensesOrderGui:Add, Text, x0 y50 w500 Center cWhite, â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     Gui, LicensesOrderGui:Font, s12 cFFD700, Segoe UI
-    Gui, LicensesOrderGui:Add, Text, x25 y90, 1. Лицензия на наземным транспортом (400$)
-    Gui, LicensesOrderGui:Add, Text, x25 y125, 2. Лицензия на ношение оружия (125.000$)
-    Gui, LicensesOrderGui:Add, Text, x25 y160, 3. Лицензия на водный транспорт (25.000$)
-    Gui, LicensesOrderGui:Add, Text, x25 y195, 4. Разрешение на полёты на джетпаку (5.000$)
-    Gui, LicensesOrderGui:Add, Text, x25 y230, 5. Разрешение на выполнение высотных полетов (15.000$)
-    Gui, LicensesOrderGui:Add, Text, x25 y265, 6. Лицензия на воздушный транспорт (30.000$)
-    Gui, LicensesOrderGui:Add, Text, x25 y300, 7. Лицензия на покупку бизнеса (250.000$)
+    Gui, LicensesOrderGui:Add, Text, x25 y90, 1. Ð›Ð¸Ñ†ÐµÐ½Ð·Ð¸Ñ Ð½Ð° Ð½Ð°Ð·ÐµÐ¼Ð½Ñ‹Ð¼ Ñ‚Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚Ð¾Ð¼ (400$)
+    Gui, LicensesOrderGui:Add, Text, x25 y125, 2. Ð›Ð¸Ñ†ÐµÐ½Ð·Ð¸Ñ Ð½Ð° Ð½Ð¾ÑˆÐµÐ½Ð¸Ðµ Ð¾Ñ€ÑƒÐ¶Ð¸Ñ (125.000$)
+    Gui, LicensesOrderGui:Add, Text, x25 y160, 3. Ð›Ð¸Ñ†ÐµÐ½Ð·Ð¸Ñ Ð½Ð° Ð²Ð¾Ð´Ð½Ñ‹Ð¹ Ñ‚Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚ (25.000$)
+    Gui, LicensesOrderGui:Add, Text, x25 y195, 4. Ð Ð°Ð·Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ Ð½Ð° Ð¿Ð¾Ð»Ñ‘Ñ‚Ñ‹ Ð½Ð° Ð´Ð¶ÐµÑ‚Ð¿Ð°ÐºÑƒ (5.000$)
+    Gui, LicensesOrderGui:Add, Text, x25 y230, 5. Ð Ð°Ð·Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ Ð½Ð° Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ Ð²Ñ‹ÑÐ¾Ñ‚Ð½Ñ‹Ñ… Ð¿Ð¾Ð»ÐµÑ‚Ð¾Ð² (15.000$)
+    Gui, LicensesOrderGui:Add, Text, x25 y265, 6. Ð›Ð¸Ñ†ÐµÐ½Ð·Ð¸Ñ Ð½Ð° Ð²Ð¾Ð·Ð´ÑƒÑˆÐ½Ñ‹Ð¹ Ñ‚Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚ (30.000$)
+    Gui, LicensesOrderGui:Add, Text, x25 y300, 7. Ð›Ð¸Ñ†ÐµÐ½Ð·Ð¸Ñ Ð½Ð° Ð¿Ð¾ÐºÑƒÐ¿ÐºÑƒ Ð±Ð¸Ð·Ð½ÐµÑÐ° (250.000$)
     Gui, LicensesOrderGui:Font, s11 Bold cWhite, Segoe UI
-    ; Кнопка "Закрыть" по центру
-    Gui, LicensesOrderGui:Add, Button, gCloseLicensesOrder x175 y360 w150 h35, 🔄 Закрыть
-    Gui, LicensesOrderGui:Show, w500 h450, Список лицензий
+    ; ÐšÐ½Ð¾Ð¿ÐºÐ° "Ð—Ð°ÐºÑ€Ñ‹Ñ‚ÑŒ" Ð¿Ð¾ Ñ†ÐµÐ½Ñ‚Ñ€Ñƒ
+    Gui, LicensesOrderGui:Add, Button, gCloseLicensesOrder x175 y360 w150 h35, ðŸ”„ Ð—Ð°ÐºÑ€Ñ‹Ñ‚ÑŒ
+    Gui, LicensesOrderGui:Show, w500 h450, Ð¡Ð¿Ð¸ÑÐ¾Ðº Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¹
     Gui, Main:+Disabled
     WinActivate, ahk_id %LicensesOrderGuiHwnd%
 }
@@ -2766,7 +2766,7 @@ DragLicensesOrder:
 return
 
 ForceOpenMainGui:
-    ; Если окно игры активно (развёрнуто), не показываем главное окно, оставляем скрипт в трее
+    ; Ð•ÑÐ»Ð¸ Ð¾ÐºÐ½Ð¾ Ð¸Ð³Ñ€Ñ‹ Ð°ÐºÑ‚Ð¸Ð²Ð½Ð¾ (Ñ€Ð°Ð·Ð²Ñ‘Ñ€Ð½ÑƒÑ‚Ð¾), Ð½Ðµ Ð¿Ð¾ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÐ¼ Ð³Ð»Ð°Ð²Ð½Ð¾Ðµ Ð¾ÐºÐ½Ð¾, Ð¾ÑÑ‚Ð°Ð²Ð»ÑÐµÐ¼ ÑÐºÑ€Ð¸Ð¿Ñ‚ Ð² Ñ‚Ñ€ÐµÐµ
     if WinActive("ahk_exe gta_sa.exe")
         return
     ShowMainGui()
