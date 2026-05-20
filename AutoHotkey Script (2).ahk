@@ -2370,10 +2370,10 @@ ShowAbout:
     MsgBox, 4096, О программе,
     (
         МЭРИЯ HELPER v%ScriptVersion%
-        
+
         Автор: Melanie Vanerlon
         GitHub: https://github.com/skisasa56-max/merya-helper
-        
+
         При запуске автоматически проверяется наличие обновлений.
     )
 return
@@ -2758,7 +2758,7 @@ CheckForUpdates(showMsg := false) {
 }
 
 PerformUpdate() {
-    global UpdateTempFile, UpdateBatFile, A_ScriptFullPath
+    global UpdateTempFile, UpdateBatFile
     FileDelete, %UpdateBatFile%
     FileAppend,
     (
