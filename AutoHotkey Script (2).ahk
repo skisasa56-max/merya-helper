@@ -24,20 +24,17 @@ CheckForUpdates(showMsg := false) {
     }
     FileRead, remoteVer, %tempVerFile%
     FileDelete, %tempVerFile%
-    remoteVer := Trim(remoteVer, " `t`r`n")  ; Удаляем все пробелы, табуляции и переводы строк
+    remoteVer := Trim(remoteVer, " `t`r`n")
     if (remoteVer = "") {
         if showMsg
             MsgBox, 4096, Ошибка, Пустая версия на сервере.
         return 0
     }
-    ; Убираем невидимые символы с обоих концов
-    remoteVer := RegExReplace(remoteVer, "[\s\xA0]+$")
     if (remoteVer = ScriptVersion) {
         if showMsg
             MsgBox, 4096, Обновления, У вас последняя версия %ScriptVersion%.
         return 1
     }
-    ; Если версии не совпадают
     msgText = Версия %remoteVer% уже доступна. У вас версия %ScriptVersion%. Обновить сейчас?
     MsgBox, 4132, Доступно обновление, %msgText%
     IfMsgBox Yes
@@ -56,10 +53,6 @@ CheckForUpdates(showMsg := false) {
         ExitApp
     }
     return 0
-}
-    if showMsg
-        MsgBox, 4096, Обновления, У вас последняя версия %ScriptVersion%.
-    return 1
 }
 
 ; СИНХРОННАЯ ПРОВЕРКА ПРИ СТАРТЕ – при любой ошибке закрываемся
