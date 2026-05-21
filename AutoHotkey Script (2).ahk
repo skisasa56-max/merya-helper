@@ -13,7 +13,6 @@ global UpdateCheckUrl := "https://raw.githubusercontent.com/skisasa56-max/merya-
 global ScriptDownloadUrl := "https://raw.githubusercontent.com/skisasa56-max/merya-helper/main/AutoHotkey%20Script%20(2).ahk"
 global UpdateTempFile := A_Temp "\mhelper_new.ahk"
 
-; ФУНКЦИИ ОБНОВЛЕНИЯ (ДОЛЖНЫ БЫТЬ ОПРЕДЕЛЕНЫ ДО ВЫЗОВА)
 CheckForUpdates(showMsg := false) {
     global ScriptVersion, UpdateCheckUrl, ScriptDownloadUrl, UpdateTempFile
     tempVerFile := A_Temp "\mhelper_ver.txt"
@@ -25,42 +24,47 @@ CheckForUpdates(showMsg := false) {
     }
     FileRead, remoteVer, %tempVerFile%
     FileDelete, %tempVerFile%
-    remoteVer := Trim(remoteVer)
+    remoteVer := Trim(remoteVer, " `t`r`n")  ; Удаляем все пробелы, табуляции и переводы строк
     if (remoteVer = "") {
         if showMsg
             MsgBox, 4096, Ошибка, Пустая версия на сервере.
         return 0
     }
-    if (remoteVer != ScriptVersion) {
-        ; Формируем сообщение без использования переменной в MsgBox напрямую
-        msgText = Версия %remoteVer% уже доступна. У вас версия %ScriptVersion%. Обновить сейчас?
-        MsgBox, 4132, Доступно обновление, %msgText%
-        IfMsgBox Yes
-        {
-            URLDownloadToFile, %ScriptDownloadUrl%, %UpdateTempFile%
-            if ErrorLevel {
-                MsgBox, 4096, Ошибка, Не удалось скачать обновление.
-                return 0
-            }
-            FileCopy, %UpdateTempFile%, %A_ScriptFullPath%, 1
-            if ErrorLevel {
-                MsgBox, 4096, Ошибка, Не удалось заменить файл. Запустите от имени администратора.
-                return 0
-            }
-            Run, "%A_ScriptFullPath%"
-            ExitApp
-        }
-        return 0
+    ; Убираем невидимые символы с обоих концов
+    remoteVer := RegExReplace(remoteVer, "[\s\xA0]+$")
+    if (remoteVer = ScriptVersion) {
+        if showMsg
+            MsgBox, 4096, Обновления, У вас последняя версия %ScriptVersion%.
+        return 1
     }
+    ; Если версии не совпадают
+    msgText = Версия %remoteVer% уже доступна. У вас версия %ScriptVersion%. Обновить сейчас?
+    MsgBox, 4132, Доступно обновление, %msgText%
+    IfMsgBox Yes
+    {
+        URLDownloadToFile, %ScriptDownloadUrl%, %UpdateTempFile%
+        if ErrorLevel {
+            MsgBox, 4096, Ошибка, Не удалось скачать обновление.
+            return 0
+        }
+        FileCopy, %UpdateTempFile%, %A_ScriptFullPath%, 1
+        if ErrorLevel {
+            MsgBox, 4096, Ошибка, Не удалось заменить файл. Запустите от имени администратора.
+            return 0
+        }
+        Run, "%A_ScriptFullPath%"
+        ExitApp
+    }
+    return 0
+}
     if showMsg
         MsgBox, 4096, Обновления, У вас последняя версия %ScriptVersion%.
     return 1
 }
 
-; СИНХРОННАЯ ПРОВЕРКА ПРИ СТАРТЕ (ЕСЛИ НЕТ ИНТЕРНЕТА – ЗАКРЫВАЕМСЯ)
-CheckForUpdates(true)
-if (ScriptVersion != "18.2") { ; если версия поменялась внутри, но проверка не прошла
-    MsgBox, 4096, Критическая ошибка, Не удалось подтвердить версию. Скрипт закрыт.
+; СИНХРОННАЯ ПРОВЕРКА ПРИ СТАРТЕ – при любой ошибке закрываемся
+if !CheckForUpdates(true) {
+    MsgBox, 4096, Критическая ошибка, Не удалось проверить обновления. Скрипт закрыт.
     ExitApp
 }
 
