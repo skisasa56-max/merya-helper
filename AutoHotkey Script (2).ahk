@@ -15,51 +15,120 @@ global UpdateTempFile := A_Temp "\mhelper_new.ahk"
 
 CheckForUpdates(showMsg := false) {
     global ScriptVersion, UpdateCheckUrl, ScriptDownloadUrl, UpdateTempFile
-    tempVerFile := A_Temp "\mhelper_ver.txt"
-    URLDownloadToFile, %UpdateCheckUrl%, %tempVerFile%
-    if ErrorLevel {
+    timeoutMs := 5000  ; 5 секунд – достаточно, чтобы получить маленький файл
+
+    ; Используем WinHttpRequest для точного контроля таймаута
+    try {
+        http := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+        http.Open("GET", UpdateCheckUrl, false)
+        http.SetTimeouts(timeoutMs, timeoutMs, timeoutMs, timeoutMs)
+        http.Send()
+        if (http.Status != 200) {
+            if showMsg
+                CustomMsgBox("Ошибка", "Сервер вернул статус " http.Status ". Проверьте интернет.", "OK")
+            return 0
+        }
+        remoteVer := Trim(http.ResponseText, " `t`r`n")
+    } catch {
         if showMsg
-            MsgBox, 4096, Ошибка, Не удалось соединиться с сервером.
+            CustomMsgBox("Ошибка", "Не удалось соединиться с сервером за " timeoutMs/1000 " секунд.", "OK")
         return 0
     }
-    FileRead, remoteVer, %tempVerFile%
-    FileDelete, %tempVerFile%
-    remoteVer := Trim(remoteVer, " `t`r`n")
+
     if (remoteVer = "") {
         if showMsg
-            MsgBox, 4096, Ошибка, Пустая версия на сервере.
+            CustomMsgBox("Ошибка", "Пустая версия на сервере.", "OK")
         return 0
     }
+
     if (remoteVer = ScriptVersion) {
         if showMsg
-            MsgBox, 4096, Обновления, У вас последняя версия %ScriptVersion%.
+            CustomMsgBox("Обновления", "У вас последняя версия " ScriptVersion ".", "OK")
         return 1
     }
-    msgText = Версия %remoteVer% уже доступна. У вас версия %ScriptVersion%. Обновить сейчас?
-    MsgBox, 4132, Доступно обновление, %msgText%
-    IfMsgBox Yes
-    {
-        URLDownloadToFile, %ScriptDownloadUrl%, %UpdateTempFile%
-        if ErrorLevel {
-            MsgBox, 4096, Ошибка, Не удалось скачать обновление.
+
+    ; Версии не совпадают – спрашиваем об обновлении
+    answer := CustomMsgBox("Доступно обновление", "Версия " remoteVer " уже доступна. У вас версия " ScriptVersion ". Обновить сейчас?", "YesNo")
+    if (answer = "Yes") {
+        ; Скачиваем новый скрипт через WinHttpRequest (с тем же таймаутом)
+        try {
+            http2 := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+            http2.Open("GET", ScriptDownloadUrl, false)
+            http2.SetTimeouts(timeoutMs, timeoutMs, timeoutMs, timeoutMs)
+            http2.Send()
+            if (http2.Status != 200) {
+                CustomMsgBox("Ошибка", "Не удалось скачать обновление (статус " http2.Status ").", "OK")
+                return 0
+            }
+            newScript := http2.ResponseText
+            tempFile := A_Temp "\mhelper_new.ahk"
+            FileDelete, %tempFile%
+            FileAppend, %newScript%, %tempFile%
+            if ErrorLevel {
+                CustomMsgBox("Ошибка", "Не удалось сохранить временный файл.", "OK")
+                return 0
+            }
+            FileCopy, %tempFile%, %A_ScriptFullPath%, 1
+            if ErrorLevel {
+                CustomMsgBox("Ошибка", "Не удалось заменить файл. Запустите от имени администратора.", "OK")
+                return 0
+            }
+            Run, "%A_ScriptFullPath%"
+            ExitApp
+        } catch {
+            CustomMsgBox("Ошибка", "Не удалось скачать обновление (таймаут).", "OK")
             return 0
         }
-        FileCopy, %UpdateTempFile%, %A_ScriptFullPath%, 1
-        if ErrorLevel {
-            MsgBox, 4096, Ошибка, Не удалось заменить файл. Запустите от имени администратора.
-            return 0
-        }
-        Run, "%A_ScriptFullPath%"
-        ExitApp
     }
     return 0
 }
 
-; СИНХРОННАЯ ПРОВЕРКА ПРИ СТАРТЕ – при любой ошибке закрываемся
-if !CheckForUpdates(true) {
-    MsgBox, 4096, Критическая ошибка, Не удалось проверить обновления. Скрипт закрыт.
-    ExitApp
+; Создаёт красивое окно с тёмным фоном и золотым текстом
+CustomMsgBox(title, text, buttons := "OK") {
+    static hGui
+    Gui, CustomMsg:New, +AlwaysOnTop +ToolWindow -Caption +LastFound
+    hGui := WinExist()
+    Gui, CustomMsg:Color, 1A1A1A, 2D2D2D
+    Gui, CustomMsg:Font, s12 Bold cFFD700, Segoe UI
+    Gui, CustomMsg:Add, Text, x20 y15 cFFD700, %title%
+    Gui, CustomMsg:Font, s10 cWhite, Segoe UI
+    Gui, CustomMsg:Add, Text, x20 y50, %text%
+    Gui, CustomMsg:Font, s11 Bold cWhite, Segoe UI
+
+    if (buttons = "OK") {
+        Gui, CustomMsg:Add, Button, gCustomMsgOK x80 y90 w80 h30, OK
+    } else if (buttons = "YesNo") {
+        Gui, CustomMsg:Add, Button, gCustomMsgYes x50 y90 w70 h30, Да
+        Gui, CustomMsg:Add, Button, gCustomMsgNo x140 y90 w70 h30, Нет
+    }
+    ; Вычисляем размер окна
+    Gui, CustomMsg:Show, Hide
+    WinGetPos,,, w, h, ahk_id %hGui%
+    w := w + 40
+    h := h + 50
+    SysGet, workArea, MonitorWorkArea
+    x := (workAreaRight - workAreaLeft - w) // 2
+    y := (workAreaBottom - workAreaTop - h) // 2
+    Gui, CustomMsg:Show, x%x% y%y% w%w% h%h% NoActivate
+    ; Ждём ответа
+    global CustomMsgResult
+    CustomMsgResult := ""
+    while (CustomMsgResult = "") {
+        Sleep, 10
+    }
+    Gui, CustomMsg:Destroy
+    return CustomMsgResult
 }
+
+CustomMsgOK:
+    CustomMsgResult := "OK"
+return
+CustomMsgYes:
+    CustomMsgResult := "Yes"
+return
+CustomMsgNo:
+    CustomMsgResult := "No"
+return
 
 OnExit, SaveOnExit
 SetTimer, ForceOpenMainGui, -500
