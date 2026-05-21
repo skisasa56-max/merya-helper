@@ -8,7 +8,7 @@ SetWorkingDir %A_ScriptDir%
 ; ====================================================================================================
 ; НАСТРОЙКИ АВТООБНОВЛЕНИЯ (СИНХРОННАЯ ПРОВЕРКА)
 ; ====================================================================================================
-global ScriptVersion := "18.2"
+global ScriptVersion := "18.3"
 global UpdateCheckUrl := "https://raw.githubusercontent.com/skisasa56-max/merya-helper/main/version.txt"
 global ScriptDownloadUrl := "https://raw.githubusercontent.com/skisasa56-max/merya-helper/main/AutoHotkey%20Script%20(2).ahk"
 global UpdateTempFile := A_Temp "\mhelper_new.ahk"
